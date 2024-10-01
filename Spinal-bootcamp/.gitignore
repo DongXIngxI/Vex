@@ -1,0 +1,15 @@
+*.v
+*.vhdl
+*.log
+.ipynb_checkpoints/
+rtl/*.*
+bak/
+zh2/
+zh-cn/
+en/
+source/*.ipynb
+a.sh
+jupyter.md
+0.0-teston*
+exercises/out
+out

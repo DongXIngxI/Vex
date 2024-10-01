@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/exercises/Examples/src/Examples.iml" filepath="$PROJECT_DIR$/exercises/Examples/src/Examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Spinal-bootcamp.iml" filepath="$PROJECT_DIR$/.idea/Spinal-bootcamp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exercises/Examples/test/test.iml" filepath="$PROJECT_DIR$/exercises/Examples/test/test.iml" />
+    </modules>
+  </component>
+</project>
