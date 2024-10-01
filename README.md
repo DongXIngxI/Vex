@@ -12,6 +12,9 @@ a project to transplant vexCPU to Gowin FPGA
 
 ## 参考资源
 SpinalHDL/VexRiscv论坛 https://app.gitter.im/#/room/#SpinalHDL_VexRiscv:gitter.im
+
 git 教程 https://www.cnblogs.com/yysbolg/p/8566389.html
+
         https://git-scm.com/docs/gittutorial
+        
 建议使用ssh而不是http 进行git clone       
