@@ -15,6 +15,6 @@ SpinalHDL/VexRiscv论坛 https://app.gitter.im/#/room/#SpinalHDL_VexRiscv:gitter
 
 git 教程 https://www.cnblogs.com/yysbolg/p/8566389.html
 
-        https://git-scm.com/docs/gittutorial
+https://git-scm.com/docs/gittutorial
         
 建议使用ssh而不是http 进行git clone       
