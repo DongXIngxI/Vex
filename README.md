@@ -8,7 +8,7 @@ a project to transplant vexCPU to Gowin FPGA
 ### VexRicsv-Original
 原VexRicsv的仓库复制过来的
 
-### 另外可以新建文件夹用于
+### 另外可以新建文件夹用于存放新的工程
 
 ## 参考资源
 SpinalHDL/VexRiscv论坛 https://app.gitter.im/#/room/#SpinalHDL_VexRiscv:gitter.im
