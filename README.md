@@ -1,5 +1,5 @@
 # Vex
-a project to transplant vexCPU to Gowin FPGA 
+
 
 ## 项目文件夹描述
 ### Spinal-bootcamp 
