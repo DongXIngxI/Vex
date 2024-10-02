@@ -8,6 +8,9 @@
 ### VexRicsv-Original
 原VexRicsv的仓库复制过来的
 
+###myCPU_project
+CPU工程
+
 ### 另外可以新建文件夹用于存放新的工程
 
 ## 参考资源
