@@ -1,0 +1,4 @@
+[debug] [vexriscvcpu-build] Classpath dependencies List()
+[debug] [vexriscvcpu-build] Dependencies from configurations List()
+[debug] Bloop wrote the configuration of project 'vexriscvcpu-build' to '/home/anata/VexRiscvcpu/project/.bloop/vexriscvcpu-build.json'
+[success] Generated .bloop/vexriscvcpu-build.json

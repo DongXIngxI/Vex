@@ -1,0 +1,301 @@
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:4:17: object plugin is not a member of package vexriscv[0m
+[0m[[0m[31merror[0m] [0m[0mimport vexriscv.plugin._[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:6:17: object ip is not a member of package vexriscv[0m
+[0m[[0m[31merror[0m] [0m[0mimport vexriscv.ip.{DataCacheConfig, InstructionCacheConfig}[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:7:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.core._[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:8:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib._[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:9:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.bus.amba3.apb._[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:10:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.bus.amba4.axi._[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:11:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.com.jtag.Jtag[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:12:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.com.jtag.sim.JtagTcp[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:13:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.com.uart.sim.{UartDecoder, UartEncoder}[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:14:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.com.uart.{Apb3UartCtrl, Uart, UartCtrlGenerics, UartCtrlMemoryMappedConfig}[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:15:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.graphic.RgbConfig[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:16:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.graphic.vga.{Axi4VgaCtrl, Axi4VgaCtrlGenerics, Vga}[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:17:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.io.TriStateArray[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:18:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.memory.sdram.SdramGeneration.SDR[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:19:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.memory.sdram._[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:20:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.memory.sdram.sdr.sim.SdramModel[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:21:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.memory.sdram.sdr.{Axi4SharedSdramCtrl, IS42x320D, SdramInterface, SdramTimings}[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:22:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.misc.HexTools[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:23:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.soc.pinsec.{PinsecTimerCtrl, PinsecTimerCtrlExternal}[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:24:8: not found: object spinal[0m
+[0m[[0m[31merror[0m] [0m[0mimport spinal.lib.system.debugger.{JtagAxi4SharedDebugger, JtagBridge, SystemDebugger, SystemDebuggerConfig}[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:29:39: not found: type HertzNumber[0m
+[0m[[0m[31merror[0m] [0m[0mcase class BrieyConfig(axiFrequency : HertzNumber,[0m
+[0m[[0m[31merror[0m] [0m[0m                                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:31:37: not found: type SdramLayout[0m
+[0m[[0m[31merror[0m] [0m[0m                       sdramLayout: SdramLayout,[0m
+[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:32:38: not found: type SdramTimings[0m
+[0m[[0m[31merror[0m] [0m[0m                       sdramTimings: SdramTimings,[0m
+[0m[[0m[31merror[0m] [0m[0m                                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:33:49: not found: type Plugin[0m
+[0m[[0m[31merror[0m] [0m[0m                       cpuPlugins : ArrayBuffer[Plugin[VexRiscv]],[0m
+[0m[[0m[31merror[0m] [0m[0m                                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:34:41: not found: type UartCtrlMemoryMappedConfig[0m
+[0m[[0m[31merror[0m] [0m[0m                       uartCtrlConfig : UartCtrlMemoryMappedConfig)[0m
+[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:166:46: not found: type Component[0m
+[0m[[0m[31merror[0m] [0m[0mclass Briey(val config: BrieyConfig) extends Component{[0m
+[0m[[0m[31merror[0m] [0m[0m                                             ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:169:26: not found: type HertzNumber[0m
+[0m[[0m[31merror[0m] [0m[0m  def this(axiFrequency: HertzNumber) {[0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:176:22: not found: value RgbConfig[0m
+[0m[[0m[31merror[0m] [0m[0m  def vgaRgbConfig = RgbConfig(5,6,5)[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:178:16: not found: type Bundle[0m
+[0m[[0m[31merror[0m] [0m[0m  val io = new Bundle{[0m
+[0m[[0m[31merror[0m] [0m[0m               ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:180:22: not found: value in[0m
+[0m[[0m[31merror[0m] [0m[0m    val asyncReset = in Bool()[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:181:22: not found: value in[0m
+[0m[[0m[31merror[0m] [0m[0m    val axiClk     = in Bool()[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:182:22: not found: value in[0m
+[0m[[0m[31merror[0m] [0m[0m    val vgaClk     = in Bool()[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:185:22: not found: value slave[0m
+[0m[[0m[31merror[0m] [0m[0m    val jtag       = slave(Jtag())[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:185:28: not found: value Jtag[0m
+[0m[[0m[31merror[0m] [0m[0m    val jtag       = slave(Jtag())[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:186:22: not found: value master[0m
+[0m[[0m[31merror[0m] [0m[0m    val sdram      = master(SdramInterface(sdramLayout))[0m
+[0m[[0m[31merror[0m] [0m[0m                     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:186:29: not found: value SdramInterface[0m
+[0m[[0m[31merror[0m] [0m[0m    val sdram      = master(SdramInterface(sdramLayout))[0m
+[0m[[0m[31merror[0m] [0m[0m                            ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:189:25: not found: value master[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioA         = master(TriStateArray(32 bits))[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:189:32: not found: value TriStateArray[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioA         = master(TriStateArray(32 bits))[0m
+[0m[[0m[31merror[0m] [0m[0m                               ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:189:49: value bits is not a member of Int[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioA         = master(TriStateArray(32 bits))[0m
+[0m[[0m[31merror[0m] [0m[0m                                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:190:25: not found: value master[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioB         = master(TriStateArray(32 bits))[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:190:32: not found: value TriStateArray[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioB         = master(TriStateArray(32 bits))[0m
+[0m[[0m[31merror[0m] [0m[0m                               ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:190:49: value bits is not a member of Int[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioB         = master(TriStateArray(32 bits))[0m
+[0m[[0m[31merror[0m] [0m[0m                                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:191:25: not found: value master[0m
+[0m[[0m[31merror[0m] [0m[0m    val uart          = master(Uart())[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:191:32: not found: value Uart[0m
+[0m[[0m[31merror[0m] [0m[0m    val uart          = master(Uart())[0m
+[0m[[0m[31merror[0m] [0m[0m                               ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:192:25: not found: value master[0m
+[0m[[0m[31merror[0m] [0m[0m    val vga           = master(Vga(vgaRgbConfig))[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:192:32: not found: value Vga[0m
+[0m[[0m[31merror[0m] [0m[0m    val vga           = master(Vga(vgaRgbConfig))[0m
+[0m[[0m[31merror[0m] [0m[0m                               ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:193:25: not found: value in[0m
+[0m[[0m[31merror[0m] [0m[0m    val timerExternal = in(PinsecTimerCtrlExternal())[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:193:28: not found: value PinsecTimerCtrlExternal[0m
+[0m[[0m[31merror[0m] [0m[0m    val timerExternal = in(PinsecTimerCtrlExternal())[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:194:25: not found: value in[0m
+[0m[[0m[31merror[0m] [0m[0m    val coreInterrupt = in Bool()[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:197:30: not found: value ClockDomain[0m
+[0m[[0m[31merror[0m] [0m[0m  val resetCtrlClockDomain = ClockDomain([0m
+[0m[[0m[31merror[0m] [0m[0m                             ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:198:5: not found: value clock[0m
+[0m[[0m[31merror[0m] [0m[0m    clock = io.axiClk,[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:199:12: reassignment to val[0m
+[0m[[0m[31merror[0m] [0m[0m    config = ClockDomainConfig([0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:204:23: not found: type ClockingArea[0m
+[0m[[0m[31merror[0m] [0m[0m  val resetCtrl = new ClockingArea(resetCtrlClockDomain) {[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:205:34: not found: value False[0m
+[0m[[0m[31merror[0m] [0m[0m    val systemResetUnbuffered  = False[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:210:30: not found: value Reg[0m
+[0m[[0m[31merror[0m] [0m[0m    val systemResetCounter = Reg(UInt(6 bits)) init(0)[0m
+[0m[[0m[31merror[0m] [0m[0m                             ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:210:34: not found: value UInt[0m
+[0m[[0m[31merror[0m] [0m[0m    val systemResetCounter = Reg(UInt(6 bits)) init(0)[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:210:41: value bits is not a member of Int[0m
+[0m[[0m[31merror[0m] [0m[0m    val systemResetCounter = Reg(UInt(6 bits)) init(0)[0m
+[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:220:24: not found: value RegNext[0m
+[0m[[0m[31merror[0m] [0m[0m    val systemReset  = RegNext(systemResetUnbuffered)[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:221:24: not found: value RegNext[0m
+[0m[[0m[31merror[0m] [0m[0m    val axiReset     = RegNext(systemResetUnbuffered)[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:222:24: not found: value BufferCC[0m
+[0m[[0m[31merror[0m] [0m[0m    val vgaReset     = BufferCC(axiReset)[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:211:5: not found: value when[0m
+[0m[[0m[31merror[0m] [0m[0m    when(systemResetCounter =/= U(systemResetCounter.range -> true)){[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:215:5: not found: value when[0m
+[0m[[0m[31merror[0m] [0m[0m    when(BufferCC(io.asyncReset)){[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:215:10: not found: value BufferCC[0m
+[0m[[0m[31merror[0m] [0m[0m    when(BufferCC(io.asyncReset)){[0m
+[0m[[0m[31merror[0m] [0m[0m         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:225:24: not found: value ClockDomain[0m
+[0m[[0m[31merror[0m] [0m[0m  val axiClockDomain = ClockDomain([0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:226:5: not found: value clock[0m
+[0m[[0m[31merror[0m] [0m[0m    clock = io.axiClk,[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:227:5: not found: value reset[0m
+[0m[[0m[31merror[0m] [0m[0m    reset = resetCtrl.axiReset,[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:228:5: not found: value frequency[0m
+[0m[[0m[31merror[0m] [0m[0m    frequency = FixedFrequency(axiFrequency) //The frequency information is used by the SDRAM controller[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:231:26: not found: value ClockDomain[0m
+[0m[[0m[31merror[0m] [0m[0m  val debugClockDomain = ClockDomain([0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:232:5: not found: value clock[0m
+[0m[[0m[31merror[0m] [0m[0m    clock = io.axiClk,[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:233:5: not found: value reset[0m
+[0m[[0m[31merror[0m] [0m[0m    reset = resetCtrl.systemReset,[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:234:5: not found: value frequency[0m
+[0m[[0m[31merror[0m] [0m[0m    frequency = FixedFrequency(axiFrequency)[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:237:24: not found: value ClockDomain[0m
+[0m[[0m[31merror[0m] [0m[0m  val vgaClockDomain = ClockDomain([0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:238:5: not found: value clock[0m
+[0m[[0m[31merror[0m] [0m[0m    clock = io.vgaClk,[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:239:5: not found: value reset[0m
+[0m[[0m[31merror[0m] [0m[0m    reset = resetCtrl.vgaReset[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:242:17: not found: type ClockingArea[0m
+[0m[[0m[31merror[0m] [0m[0m  val axi = new ClockingArea(axiClockDomain) {[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:243:15: not found: value Axi4SharedOnChipRam[0m
+[0m[[0m[31merror[0m] [0m[0m    val ram = Axi4SharedOnChipRam([0m
+[0m[[0m[31merror[0m] [0m[0m              ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:244:7: not found: value dataWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      dataWidth = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:245:7: not found: value byteCount[0m
+[0m[[0m[31merror[0m] [0m[0m      byteCount = onChipRamSize,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:246:7: not found: value idWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      idWidth = 4[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:249:21: not found: value Axi4SharedSdramCtrl[0m
+[0m[[0m[31merror[0m] [0m[0m    val sdramCtrl = Axi4SharedSdramCtrl([0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:250:7: not found: value axiDataWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      axiDataWidth = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:251:7: not found: value axiIdWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      axiIdWidth   = 4,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:252:7: not found: value layout[0m
+[0m[[0m[31merror[0m] [0m[0m      layout       = sdramLayout,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:253:7: not found: value timing[0m
+[0m[[0m[31merror[0m] [0m[0m      timing       = sdramTimings,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:254:7: not found: value CAS[0m
+[0m[[0m[31merror[0m] [0m[0m      CAS          = 3[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:258:21: not found: value Axi4SharedToApb3Bridge[0m
+[0m[[0m[31merror[0m] [0m[0m    val apbBridge = Axi4SharedToApb3Bridge([0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:259:7: not found: value addressWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      addressWidth = 20,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:260:7: not found: value dataWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      dataWidth    = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:261:7: not found: value idWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      idWidth      = 4[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:264:21: not found: value Apb3Gpio[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioACtrl = Apb3Gpio([0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:265:7: not found: value gpioWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      gpioWidth = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:266:7: not found: value withReadSync[0m
+[0m[[0m[31merror[0m] [0m[0m      withReadSync = true[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:268:21: not found: value Apb3Gpio[0m
+[0m[[0m[31merror[0m] [0m[0m    val gpioBCtrl = Apb3Gpio([0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:269:7: not found: value gpioWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      gpioWidth = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:270:7: not found: value withReadSync[0m
+[0m[[0m[31merror[0m] [0m[0m      withReadSync = true[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:272:21: not found: value PinsecTimerCtrl[0m
+[0m[[0m[31merror[0m] [0m[0m    val timerCtrl = PinsecTimerCtrl()[0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:275:20: not found: value Apb3UartCtrl[0m
+[0m[[0m[31merror[0m] [0m[0m    val uartCtrl = Apb3UartCtrl(uartCtrlConfig)[0m
+[0m[[0m[31merror[0m] [0m[0m                   ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:279:25: not found: value Axi4VgaCtrlGenerics[0m
+[0m[[0m[31merror[0m] [0m[0m    val vgaCtrlConfig = Axi4VgaCtrlGenerics([0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:280:7: not found: value axiAddressWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      axiAddressWidth = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala:281:7: not found: value axiDataWidth[0m
+[0m[[0m[31merror[0m] [0m[0m      axiDataWidth    = 32,[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0m100 errors found[0m

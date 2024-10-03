@@ -1,0 +1,26 @@
+{
+  "name": "scala",
+  "argv": [
+    "/home/anata/.cache/coursier/arc/https/github.com/scala/scala3/releases/download/3.5.1/scala3-3.5.1-x86_64-pc-linux.tar.gz/scala3-3.5.1-x86_64-pc-linux/bin/scala-cli",
+    "--cli-default-scala-version",
+    "3.5.1",
+    "--repository",
+    "file:///home/anata/.cache/coursier/arc/https/github.com/scala/scala3/releases/download/3.5.1/scala3-3.5.1-x86_64-pc-linux.tar.gz/scala3-3.5.1-x86_64-pc-linux/maven2",
+    "--prog-name",
+    "scala",
+    "bsp",
+    "--json-options",
+    "/home/anata/VexRiscv/src/main/scala/vexriscv/demo/.scala-build/ide-options-v2.json",
+    "--json-launcher-options",
+    "/home/anata/VexRiscv/src/main/scala/vexriscv/demo/.scala-build/ide-launcher-options.json",
+    "--envs-file",
+    "/home/anata/VexRiscv/src/main/scala/vexriscv/demo/.scala-build/ide-envs.json",
+    "/home/anata/VexRiscv/src/main/scala/vexriscv/demo/Briey.scala"
+  ],
+  "version": "1.4.3",
+  "bspVersion": "2.1.1",
+  "languages": [
+    "scala",
+    "java"
+  ]
+}
