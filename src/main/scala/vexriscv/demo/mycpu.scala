@@ -6,11 +6,13 @@ import vexriscv.ip.{DataCacheConfig, InstructionCacheConfig}
 import spinal.core._
 import spinal.lib._
 import spinal.lib.bus.amba3.apb._
+import spinal.lib.bus.amba3.apb.{Apb3Gpio}
 import spinal.lib.bus.amba4.axi._
 import spinal.lib.com.jtag.Jtag
 import spinal.lib.com.jtag.sim.JtagTcp
 import spinal.lib.com.uart.sim.{UartDecoder, UartEncoder}
 import spinal.lib.com.uart.{Apb3UartCtrl, Uart, UartCtrlGenerics, UartCtrlMemoryMappedConfig}
+import spinal.lib.com.spi._
 import spinal.lib.graphic.RgbConfig
 import spinal.lib.graphic.vga.{Axi4VgaCtrl, Axi4VgaCtrlGenerics, Vga}
 import spinal.lib.io.TriStateArray
@@ -21,36 +23,45 @@ import spinal.lib.memory.sdram.sdr.{Axi4SharedSdramCtrl, IS42x320D, SdramInterfa
 import spinal.lib.misc.HexTools
 import spinal.lib.soc.pinsec.{PinsecTimerCtrl, PinsecTimerCtrlExternal}
 import spinal.lib.system.debugger.{JtagAxi4SharedDebugger, JtagBridge, SystemDebugger, SystemDebuggerConfig}
-
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.Seq
 import _root_.vexriscv.demo.smp.VexRiscvSmpClusterGen.vexRiscvConfig
-
 case class mycpuConfig(axiFrequency : HertzNumber,
                        onChipRamSize : BigInt,
                       //  sdramLayout: SdramLayout,
                       //  sdramTimings: SdramTimings,
                        cpuPlugins : ArrayBuffer[Plugin[VexRiscv]],
-                       uartCtrlConfig : UartCtrlMemoryMappedConfig)
+                       uartCtrlConfig : UartCtrlMemoryMappedConfig,
+                       spiCtrlConfig  : SpiMasterCtrlMemoryMappedConfig)
 
 object mycpuConfig{
 
   def default = {
     val config =mycpuConfig(
       axiFrequency = 50 MHz,
-      onChipRamSize  = 4 kB,
+      onChipRamSize  = 8 kB,
       // sdramLayout = IS42x320D.layout,
       // sdramTimings = IS42x320D.timingGrade7,
       uartCtrlConfig = UartCtrlMemoryMappedConfig(
         uartCtrlConfig = UartCtrlGenerics(
           dataWidthMax      = 8,
+
           clockDividerWidth = 20,
           preSamplingSize   = 1,
           samplingSize      = 5,
           postSamplingSize  = 2
         ),
-        txFifoDepth = 16,
-        rxFifoDepth = 16
+        txFifoDepth = 32,
+        rxFifoDepth = 32
+      ),
+      spiCtrlConfig = SpiMasterCtrlMemoryMappedConfig(
+        ctrlGenerics = SpiMasterCtrlGenerics(
+          ssWidth =1,
+          timerWidth =32,
+          dataWidth  = 8
+        ),
+        cmdFifoDepth = 16,
+        rspFifoDepth = 16,
       ),
       cpuPlugins = ArrayBuffer(
         new PcManagerSimplePlugin(0x80000000l, false),
@@ -187,9 +198,10 @@ class mycpu(val config: mycpuConfig) extends Component{
     // val sdram      = master(SdramInterface(sdramLayout))
 
     //Peripherals IO
-    val gpioA         = master(TriStateArray(32 bits))
-    val gpioB         = master(TriStateArray(32 bits))
+    val gpioA         = master(TriStateArray(4 bits))
+    val gpioB         = master(TriStateArray(4 bits))
     val uart          = master(Uart())
+    val spi           = master(SpiMaster())
     // val vga           = master(Vga(vgaRgbConfig))
     val timerExternal = in(PinsecTimerCtrlExternal())
     val coreInterrupt = in Bool()
@@ -261,13 +273,12 @@ class mycpu(val config: mycpuConfig) extends Component{
       dataWidth    = 32,
       idWidth      = 4
     )
-
     val gpioACtrl = Apb3Gpio(
-      gpioWidth = 32,
+      gpioWidth = 4,
       withReadSync = true
     )
     val gpioBCtrl = Apb3Gpio(
-      gpioWidth = 32,
+      gpioWidth = 4,
       withReadSync = true
     )
     val timerCtrl = PinsecTimerCtrl()
@@ -275,7 +286,7 @@ class mycpu(val config: mycpuConfig) extends Component{
 
     val uartCtrl = Apb3UartCtrl(uartCtrlConfig)
     uartCtrl.io.apb.addAttribute(Verilator.public)
-
+    val spiCtrl = Apb3SpiMasterCtrl(spiCtrlConfig)
 
     // val vgaCtrlConfig = Axi4VgaCtrlGenerics(
     //   axiAddressWidth = 32,
@@ -374,12 +385,14 @@ class mycpu(val config: mycpuConfig) extends Component{
 
 
     val apbDecoder = Apb3Decoder(
+      
       master = apbBridge.io.apb,
       slaves = List(
         gpioACtrl.io.apb -> (0x00000, 4 kB),
         gpioBCtrl.io.apb -> (0x01000, 4 kB),
         uartCtrl.io.apb  -> (0x10000, 4 kB),
         timerCtrl.io.apb -> (0x20000, 4 kB),
+        spiCtrl.io.apb   -> (0x30000, 4 kB),
         // vgaCtrl.io.apb   -> (0x30000, 4 kB)
       )
     )
@@ -389,6 +402,7 @@ class mycpu(val config: mycpuConfig) extends Component{
   io.gpioB          <> axi.gpioBCtrl.io.gpio
   io.timerExternal  <> axi.timerCtrl.io.external
   io.uart           <> axi.uartCtrl.io.uart
+  io.spi            <> axi.spiCtrl.io.spi 
   // io.sdram          <> axi.sdramCtrl.io.sdram
 //   io.vga            <> axi.vgaCtrl.io.vga
 }
@@ -414,7 +428,8 @@ object mycpuWithMemoryInit{
     config.generateVerilog({
       val toplevel = new mycpu(mycpuConfig.default)
     //   toplevel.axi.vgaCtrl.vga.ctrl.io.error.addAttribute(Verilator.public)
-      HexTools.initRam(toplevel.axi.ram.ram, "VexSoftware/timer/build/timer.hex", 0x80000000l)
+      HexTools.initRam(toplevel.axi.ram.ram, "VexSoftware/gpio/build/gpio.hex", 0x80000000l)
+      // HexTools.initRam(toplevel.axi.ram.ram, "VexRiscvSocSoftware/projects/vexcpu/timer/build/timer.hex", 0x80000000l)
       toplevel
     })
   }

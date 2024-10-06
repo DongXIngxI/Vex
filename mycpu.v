@@ -1,20 +1,24 @@
 // Generator : SpinalHDL v1.10.2a    git head : a348a60b7e8b6a455c72e1536ec3d74a2ea16935
 // Component : mycpu
-// Git hash  : e79ff6b4d105818599930e3f0a0ac27c89e3ab5c
+// Git hash  : c7bf9c826469a0d9c5053bea27117b6365c27ee7
 
 `timescale 1ns/1ps
 
 module mycpu (
   input  wire          io_asyncReset,
   input  wire          io_axiClk,
-  input  wire [31:0]   io_gpioA_read,
-  output wire [31:0]   io_gpioA_write,
-  output wire [31:0]   io_gpioA_writeEnable,
-  input  wire [31:0]   io_gpioB_read,
-  output wire [31:0]   io_gpioB_write,
-  output wire [31:0]   io_gpioB_writeEnable,
+  input  wire [3:0]    io_gpioA_read,
+  output wire [3:0]    io_gpioA_write,
+  output wire [3:0]    io_gpioA_writeEnable,
+  input  wire [3:0]    io_gpioB_read,
+  output wire [3:0]    io_gpioB_write,
+  output wire [3:0]    io_gpioB_writeEnable,
   output wire          io_uart_txd,
   input  wire          io_uart_rxd,
+  output wire [0:0]    io_spi_ss,
+  output wire          io_spi_sclk,
+  output wire          io_spi_mosi,
+  input  wire          io_spi_miso,
   input  wire          io_timerExternal_clear,
   input  wire          io_timerExternal_tick,
   input  wire          io_coreInterrupt
@@ -24,13 +28,14 @@ module mycpu (
   wire       [3:0]    axi_gpioBCtrl_io_apb_PADDR;
   wire       [7:0]    axi_timerCtrl_io_apb_PADDR;
   wire       [4:0]    axi_uartCtrl_io_apb_PADDR;
+  wire       [7:0]    axi_spiCtrl_io_apb_PADDR;
   reg                 axi_core_cpu_dBus_cmd_ready;
   wire                axi_core_cpu_dBus_rsp_payload_last;
   wire                axi_core_cpu_dBus_rsp_payload_error;
   wire                axi_core_cpu_iBus_rsp_payload_error;
   reg                 dbus_axi_decoder_io_input_r_ready;
-  wire       [11:0]   axi_ram_io_axi_arbiter_io_readInputs_0_ar_payload_addr;
-  wire       [11:0]   axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr;
+  wire       [12:0]   axi_ram_io_axi_arbiter_io_readInputs_0_ar_payload_addr;
+  wire       [12:0]   axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr;
   wire                axi_ram_io_axi_arbiter_io_output_arw_ready;
   wire       [19:0]   axi_apbBridge_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr;
   wire                axi_apbBridge_io_axi_arbiter_io_output_arw_ready;
@@ -64,15 +69,15 @@ module mycpu (
   wire                axi_gpioACtrl_io_apb_PREADY;
   wire       [31:0]   axi_gpioACtrl_io_apb_PRDATA;
   wire                axi_gpioACtrl_io_apb_PSLVERROR;
-  wire       [31:0]   axi_gpioACtrl_io_gpio_write;
-  wire       [31:0]   axi_gpioACtrl_io_gpio_writeEnable;
-  wire       [31:0]   axi_gpioACtrl_io_value;
+  wire       [3:0]    axi_gpioACtrl_io_gpio_write;
+  wire       [3:0]    axi_gpioACtrl_io_gpio_writeEnable;
+  wire       [3:0]    axi_gpioACtrl_io_value;
   wire                axi_gpioBCtrl_io_apb_PREADY;
   wire       [31:0]   axi_gpioBCtrl_io_apb_PRDATA;
   wire                axi_gpioBCtrl_io_apb_PSLVERROR;
-  wire       [31:0]   axi_gpioBCtrl_io_gpio_write;
-  wire       [31:0]   axi_gpioBCtrl_io_gpio_writeEnable;
-  wire       [31:0]   axi_gpioBCtrl_io_value;
+  wire       [3:0]    axi_gpioBCtrl_io_gpio_write;
+  wire       [3:0]    axi_gpioBCtrl_io_gpio_writeEnable;
+  wire       [3:0]    axi_gpioBCtrl_io_value;
   wire                axi_timerCtrl_io_apb_PREADY;
   wire       [31:0]   axi_timerCtrl_io_apb_PRDATA;
   wire                axi_timerCtrl_io_apb_PSLVERROR;
@@ -81,6 +86,12 @@ module mycpu (
   wire       [31:0]   axi_uartCtrl_io_apb_PRDATA;
   wire                axi_uartCtrl_io_uart_txd;
   wire                axi_uartCtrl_io_interrupt;
+  wire                axi_spiCtrl_io_apb_PREADY;
+  wire       [31:0]   axi_spiCtrl_io_apb_PRDATA;
+  wire                axi_spiCtrl_io_spi_sclk;
+  wire                axi_spiCtrl_io_spi_mosi;
+  wire       [0:0]    axi_spiCtrl_io_spi_ss;
+  wire                axi_spiCtrl_io_interrupt;
   wire                axi_core_cpu_dBus_cmd_valid;
   wire                axi_core_cpu_dBus_cmd_payload_wr;
   wire                axi_core_cpu_dBus_cmd_payload_uncached;
@@ -156,7 +167,7 @@ module mycpu (
   wire       [1:0]    axi_ram_io_axi_arbiter_io_sharedInputs_0_r_payload_resp;
   wire                axi_ram_io_axi_arbiter_io_sharedInputs_0_r_payload_last;
   wire                axi_ram_io_axi_arbiter_io_output_arw_valid;
-  wire       [11:0]   axi_ram_io_axi_arbiter_io_output_arw_payload_addr;
+  wire       [12:0]   axi_ram_io_axi_arbiter_io_output_arw_payload_addr;
   wire       [3:0]    axi_ram_io_axi_arbiter_io_output_arw_payload_id;
   wire       [7:0]    axi_ram_io_axi_arbiter_io_output_arw_payload_len;
   wire       [2:0]    axi_ram_io_axi_arbiter_io_output_arw_payload_size;
@@ -195,7 +206,7 @@ module mycpu (
   wire       [31:0]   io_apb_decoder_io_input_PRDATA;
   wire                io_apb_decoder_io_input_PSLVERROR;
   wire       [19:0]   io_apb_decoder_io_output_PADDR;
-  wire       [3:0]    io_apb_decoder_io_output_PSEL;
+  wire       [4:0]    io_apb_decoder_io_output_PSEL;
   wire                io_apb_decoder_io_output_PENABLE;
   wire                io_apb_decoder_io_output_PWRITE;
   wire       [31:0]   io_apb_decoder_io_output_PWDATA;
@@ -222,12 +233,17 @@ module mycpu (
   wire                apb3Router_1_io_outputs_3_PENABLE;
   wire                apb3Router_1_io_outputs_3_PWRITE;
   wire       [31:0]   apb3Router_1_io_outputs_3_PWDATA;
+  wire       [19:0]   apb3Router_1_io_outputs_4_PADDR;
+  wire       [0:0]    apb3Router_1_io_outputs_4_PSEL;
+  wire                apb3Router_1_io_outputs_4_PENABLE;
+  wire                apb3Router_1_io_outputs_4_PWRITE;
+  wire       [31:0]   apb3Router_1_io_outputs_4_PWDATA;
   wire       [2:0]    _zz_dbus_axi_arw_payload_len;
   reg                 resetCtrl_systemResetUnbuffered;
   reg        [5:0]    resetCtrl_systemResetCounter;
-  wire       [5:0]    _zz_when_mycpu_l212;
-  wire                when_mycpu_l212;
-  wire                when_mycpu_l216;
+  wire       [5:0]    _zz_when_mycpu_l224;
+  wire                when_mycpu_l224;
+  wire                when_mycpu_l228;
   reg                 resetCtrl_systemReset;
   reg                 resetCtrl_axiReset;
   wire                dbus_axi_arw_valid;
@@ -374,7 +390,7 @@ module mycpu (
   wire       [2:0]    _zz_io_sharedInputs_0_arw_payload_id;
   wire                toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_valid;
   wire                toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_ready;
-  wire       [11:0]   toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_addr;
+  wire       [12:0]   toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_addr;
   wire       [3:0]    toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_id;
   wire       [7:0]    toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_len;
   wire       [2:0]    toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_size;
@@ -382,7 +398,7 @@ module mycpu (
   wire                toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_write;
   reg                 toplevel_axi_ram_io_axi_arbiter_io_output_arw_rValid;
   wire                toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_fire;
-  reg        [11:0]   toplevel_axi_ram_io_axi_arbiter_io_output_arw_rData_addr;
+  reg        [12:0]   toplevel_axi_ram_io_axi_arbiter_io_output_arw_rData_addr;
   reg        [3:0]    toplevel_axi_ram_io_axi_arbiter_io_output_arw_rData_id;
   reg        [7:0]    toplevel_axi_ram_io_axi_arbiter_io_output_arw_rData_len;
   reg        [2:0]    toplevel_axi_ram_io_axi_arbiter_io_output_arw_rData_size;
@@ -444,7 +460,7 @@ module mycpu (
   Axi4SharedOnChipRam axi_ram (
     .io_axi_arw_valid         (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_valid                  ), //i
     .io_axi_arw_ready         (axi_ram_io_axi_arw_ready                                                      ), //o
-    .io_axi_arw_payload_addr  (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_addr[11:0]     ), //i
+    .io_axi_arw_payload_addr  (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_addr[12:0]     ), //i
     .io_axi_arw_payload_id    (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_id[3:0]        ), //i
     .io_axi_arw_payload_len   (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_len[7:0]       ), //i
     .io_axi_arw_payload_size  (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_payload_size[2:0]      ), //i
@@ -504,36 +520,36 @@ module mycpu (
     .resetCtrl_axiReset       (resetCtrl_axiReset                                                             )  //i
   );
   Apb3Gpio axi_gpioACtrl (
-    .io_apb_PADDR        (axi_gpioACtrl_io_apb_PADDR[3:0]        ), //i
-    .io_apb_PSEL         (apb3Router_1_io_outputs_0_PSEL         ), //i
-    .io_apb_PENABLE      (apb3Router_1_io_outputs_0_PENABLE      ), //i
-    .io_apb_PREADY       (axi_gpioACtrl_io_apb_PREADY            ), //o
-    .io_apb_PWRITE       (apb3Router_1_io_outputs_0_PWRITE       ), //i
-    .io_apb_PWDATA       (apb3Router_1_io_outputs_0_PWDATA[31:0] ), //i
-    .io_apb_PRDATA       (axi_gpioACtrl_io_apb_PRDATA[31:0]      ), //o
-    .io_apb_PSLVERROR    (axi_gpioACtrl_io_apb_PSLVERROR         ), //o
-    .io_gpio_read        (io_gpioA_read[31:0]                    ), //i
-    .io_gpio_write       (axi_gpioACtrl_io_gpio_write[31:0]      ), //o
-    .io_gpio_writeEnable (axi_gpioACtrl_io_gpio_writeEnable[31:0]), //o
-    .io_value            (axi_gpioACtrl_io_value[31:0]           ), //o
-    .io_axiClk           (io_axiClk                              ), //i
-    .resetCtrl_axiReset  (resetCtrl_axiReset                     )  //i
+    .io_apb_PADDR        (axi_gpioACtrl_io_apb_PADDR[3:0]       ), //i
+    .io_apb_PSEL         (apb3Router_1_io_outputs_0_PSEL        ), //i
+    .io_apb_PENABLE      (apb3Router_1_io_outputs_0_PENABLE     ), //i
+    .io_apb_PREADY       (axi_gpioACtrl_io_apb_PREADY           ), //o
+    .io_apb_PWRITE       (apb3Router_1_io_outputs_0_PWRITE      ), //i
+    .io_apb_PWDATA       (apb3Router_1_io_outputs_0_PWDATA[31:0]), //i
+    .io_apb_PRDATA       (axi_gpioACtrl_io_apb_PRDATA[31:0]     ), //o
+    .io_apb_PSLVERROR    (axi_gpioACtrl_io_apb_PSLVERROR        ), //o
+    .io_gpio_read        (io_gpioA_read[3:0]                    ), //i
+    .io_gpio_write       (axi_gpioACtrl_io_gpio_write[3:0]      ), //o
+    .io_gpio_writeEnable (axi_gpioACtrl_io_gpio_writeEnable[3:0]), //o
+    .io_value            (axi_gpioACtrl_io_value[3:0]           ), //o
+    .io_axiClk           (io_axiClk                             ), //i
+    .resetCtrl_axiReset  (resetCtrl_axiReset                    )  //i
   );
   Apb3Gpio axi_gpioBCtrl (
-    .io_apb_PADDR        (axi_gpioBCtrl_io_apb_PADDR[3:0]        ), //i
-    .io_apb_PSEL         (apb3Router_1_io_outputs_1_PSEL         ), //i
-    .io_apb_PENABLE      (apb3Router_1_io_outputs_1_PENABLE      ), //i
-    .io_apb_PREADY       (axi_gpioBCtrl_io_apb_PREADY            ), //o
-    .io_apb_PWRITE       (apb3Router_1_io_outputs_1_PWRITE       ), //i
-    .io_apb_PWDATA       (apb3Router_1_io_outputs_1_PWDATA[31:0] ), //i
-    .io_apb_PRDATA       (axi_gpioBCtrl_io_apb_PRDATA[31:0]      ), //o
-    .io_apb_PSLVERROR    (axi_gpioBCtrl_io_apb_PSLVERROR         ), //o
-    .io_gpio_read        (io_gpioB_read[31:0]                    ), //i
-    .io_gpio_write       (axi_gpioBCtrl_io_gpio_write[31:0]      ), //o
-    .io_gpio_writeEnable (axi_gpioBCtrl_io_gpio_writeEnable[31:0]), //o
-    .io_value            (axi_gpioBCtrl_io_value[31:0]           ), //o
-    .io_axiClk           (io_axiClk                              ), //i
-    .resetCtrl_axiReset  (resetCtrl_axiReset                     )  //i
+    .io_apb_PADDR        (axi_gpioBCtrl_io_apb_PADDR[3:0]       ), //i
+    .io_apb_PSEL         (apb3Router_1_io_outputs_1_PSEL        ), //i
+    .io_apb_PENABLE      (apb3Router_1_io_outputs_1_PENABLE     ), //i
+    .io_apb_PREADY       (axi_gpioBCtrl_io_apb_PREADY           ), //o
+    .io_apb_PWRITE       (apb3Router_1_io_outputs_1_PWRITE      ), //i
+    .io_apb_PWDATA       (apb3Router_1_io_outputs_1_PWDATA[31:0]), //i
+    .io_apb_PRDATA       (axi_gpioBCtrl_io_apb_PRDATA[31:0]     ), //o
+    .io_apb_PSLVERROR    (axi_gpioBCtrl_io_apb_PSLVERROR        ), //o
+    .io_gpio_read        (io_gpioB_read[3:0]                    ), //i
+    .io_gpio_write       (axi_gpioBCtrl_io_gpio_write[3:0]      ), //o
+    .io_gpio_writeEnable (axi_gpioBCtrl_io_gpio_writeEnable[3:0]), //o
+    .io_value            (axi_gpioBCtrl_io_value[3:0]           ), //o
+    .io_axiClk           (io_axiClk                             ), //i
+    .resetCtrl_axiReset  (resetCtrl_axiReset                    )  //i
   );
   PinsecTimerCtrl axi_timerCtrl (
     .io_apb_PADDR       (axi_timerCtrl_io_apb_PADDR[7:0]       ), //i
@@ -561,6 +577,22 @@ module mycpu (
     .io_uart_txd        (axi_uartCtrl_io_uart_txd              ), //o
     .io_uart_rxd        (io_uart_rxd                           ), //i
     .io_interrupt       (axi_uartCtrl_io_interrupt             ), //o
+    .io_axiClk          (io_axiClk                             ), //i
+    .resetCtrl_axiReset (resetCtrl_axiReset                    )  //i
+  );
+  Apb3SpiMasterCtrl axi_spiCtrl (
+    .io_apb_PADDR       (axi_spiCtrl_io_apb_PADDR[7:0]         ), //i
+    .io_apb_PSEL        (apb3Router_1_io_outputs_4_PSEL        ), //i
+    .io_apb_PENABLE     (apb3Router_1_io_outputs_4_PENABLE     ), //i
+    .io_apb_PREADY      (axi_spiCtrl_io_apb_PREADY             ), //o
+    .io_apb_PWRITE      (apb3Router_1_io_outputs_4_PWRITE      ), //i
+    .io_apb_PWDATA      (apb3Router_1_io_outputs_4_PWDATA[31:0]), //i
+    .io_apb_PRDATA      (axi_spiCtrl_io_apb_PRDATA[31:0]       ), //o
+    .io_spi_ss          (axi_spiCtrl_io_spi_ss                 ), //o
+    .io_spi_sclk        (axi_spiCtrl_io_spi_sclk               ), //o
+    .io_spi_mosi        (axi_spiCtrl_io_spi_mosi               ), //o
+    .io_spi_miso        (io_spi_miso                           ), //i
+    .io_interrupt       (axi_spiCtrl_io_interrupt              ), //o
     .io_axiClk          (io_axiClk                             ), //i
     .resetCtrl_axiReset (resetCtrl_axiReset                    )  //i
   );
@@ -695,7 +727,7 @@ module mycpu (
   Axi4SharedArbiter axi_ram_io_axi_arbiter (
     .io_readInputs_0_ar_valid            (toplevel_axi4ReadOnlyDecoder_1_io_outputs_0_ar_validPipe_valid              ), //i
     .io_readInputs_0_ar_ready            (axi_ram_io_axi_arbiter_io_readInputs_0_ar_ready                             ), //o
-    .io_readInputs_0_ar_payload_addr     (axi_ram_io_axi_arbiter_io_readInputs_0_ar_payload_addr[11:0]                ), //i
+    .io_readInputs_0_ar_payload_addr     (axi_ram_io_axi_arbiter_io_readInputs_0_ar_payload_addr[12:0]                ), //i
     .io_readInputs_0_ar_payload_id       (_zz_io_readInputs_0_ar_payload_id[2:0]                                      ), //i
     .io_readInputs_0_ar_payload_len      (toplevel_axi4ReadOnlyDecoder_1_io_outputs_0_ar_validPipe_payload_len[7:0]   ), //i
     .io_readInputs_0_ar_payload_size     (3'b010                                                                      ), //i
@@ -708,7 +740,7 @@ module mycpu (
     .io_readInputs_0_r_payload_last      (axi_ram_io_axi_arbiter_io_readInputs_0_r_payload_last                       ), //o
     .io_sharedInputs_0_arw_valid         (toplevel_dbus_axi_decoder_io_sharedOutputs_0_arw_validPipe_valid            ), //i
     .io_sharedInputs_0_arw_ready         (axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_ready                          ), //o
-    .io_sharedInputs_0_arw_payload_addr  (axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr[11:0]             ), //i
+    .io_sharedInputs_0_arw_payload_addr  (axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr[12:0]             ), //i
     .io_sharedInputs_0_arw_payload_id    (_zz_io_sharedInputs_0_arw_payload_id[2:0]                                   ), //i
     .io_sharedInputs_0_arw_payload_len   (toplevel_dbus_axi_decoder_io_sharedOutputs_0_arw_validPipe_payload_len[7:0] ), //i
     .io_sharedInputs_0_arw_payload_size  (toplevel_dbus_axi_decoder_io_sharedOutputs_0_arw_validPipe_payload_size[2:0]), //i
@@ -731,7 +763,7 @@ module mycpu (
     .io_sharedInputs_0_r_payload_last    (axi_ram_io_axi_arbiter_io_sharedInputs_0_r_payload_last                     ), //o
     .io_output_arw_valid                 (axi_ram_io_axi_arbiter_io_output_arw_valid                                  ), //o
     .io_output_arw_ready                 (axi_ram_io_axi_arbiter_io_output_arw_ready                                  ), //i
-    .io_output_arw_payload_addr          (axi_ram_io_axi_arbiter_io_output_arw_payload_addr[11:0]                     ), //o
+    .io_output_arw_payload_addr          (axi_ram_io_axi_arbiter_io_output_arw_payload_addr[12:0]                     ), //o
     .io_output_arw_payload_id            (axi_ram_io_axi_arbiter_io_output_arw_payload_id[3:0]                        ), //o
     .io_output_arw_payload_len           (axi_ram_io_axi_arbiter_io_output_arw_payload_len[7:0]                       ), //o
     .io_output_arw_payload_size          (axi_ram_io_axi_arbiter_io_output_arw_payload_size[2:0]                      ), //o
@@ -815,7 +847,7 @@ module mycpu (
     .io_input_PRDATA     (io_apb_decoder_io_input_PRDATA[31:0] ), //o
     .io_input_PSLVERROR  (io_apb_decoder_io_input_PSLVERROR    ), //o
     .io_output_PADDR     (io_apb_decoder_io_output_PADDR[19:0] ), //o
-    .io_output_PSEL      (io_apb_decoder_io_output_PSEL[3:0]   ), //o
+    .io_output_PSEL      (io_apb_decoder_io_output_PSEL[4:0]   ), //o
     .io_output_PENABLE   (io_apb_decoder_io_output_PENABLE     ), //o
     .io_output_PREADY    (apb3Router_1_io_input_PREADY         ), //i
     .io_output_PWRITE    (io_apb_decoder_io_output_PWRITE      ), //o
@@ -825,7 +857,7 @@ module mycpu (
   );
   Apb3Router apb3Router_1 (
     .io_input_PADDR         (io_apb_decoder_io_output_PADDR[19:0]  ), //i
-    .io_input_PSEL          (io_apb_decoder_io_output_PSEL[3:0]    ), //i
+    .io_input_PSEL          (io_apb_decoder_io_output_PSEL[4:0]    ), //i
     .io_input_PENABLE       (io_apb_decoder_io_output_PENABLE      ), //i
     .io_input_PREADY        (apb3Router_1_io_input_PREADY          ), //o
     .io_input_PWRITE        (io_apb_decoder_io_output_PWRITE       ), //i
@@ -864,6 +896,14 @@ module mycpu (
     .io_outputs_3_PWDATA    (apb3Router_1_io_outputs_3_PWDATA[31:0]), //o
     .io_outputs_3_PRDATA    (axi_timerCtrl_io_apb_PRDATA[31:0]     ), //i
     .io_outputs_3_PSLVERROR (axi_timerCtrl_io_apb_PSLVERROR        ), //i
+    .io_outputs_4_PADDR     (apb3Router_1_io_outputs_4_PADDR[19:0] ), //o
+    .io_outputs_4_PSEL      (apb3Router_1_io_outputs_4_PSEL        ), //o
+    .io_outputs_4_PENABLE   (apb3Router_1_io_outputs_4_PENABLE     ), //o
+    .io_outputs_4_PREADY    (axi_spiCtrl_io_apb_PREADY             ), //i
+    .io_outputs_4_PWRITE    (apb3Router_1_io_outputs_4_PWRITE      ), //o
+    .io_outputs_4_PWDATA    (apb3Router_1_io_outputs_4_PWDATA[31:0]), //o
+    .io_outputs_4_PRDATA    (axi_spiCtrl_io_apb_PRDATA[31:0]       ), //i
+    .io_outputs_4_PSLVERROR (1'b0                                  ), //i
     .io_axiClk              (io_axiClk                             ), //i
     .resetCtrl_axiReset     (resetCtrl_axiReset                    )  //i
   );
@@ -873,14 +913,14 @@ module mycpu (
 
   always @(*) begin
     resetCtrl_systemResetUnbuffered = 1'b0;
-    if(when_mycpu_l212) begin
+    if(when_mycpu_l224) begin
       resetCtrl_systemResetUnbuffered = 1'b1;
     end
   end
 
-  assign _zz_when_mycpu_l212[5 : 0] = 6'h3f;
-  assign when_mycpu_l212 = (resetCtrl_systemResetCounter != _zz_when_mycpu_l212);
-  assign when_mycpu_l216 = io_asyncReset_buffercc_io_dataOut;
+  assign _zz_when_mycpu_l224[5 : 0] = 6'h3f;
+  assign when_mycpu_l224 = (resetCtrl_systemResetCounter != _zz_when_mycpu_l224);
+  assign when_mycpu_l228 = io_asyncReset_buffercc_io_dataOut;
   assign axi_core_cpu_iBus_rsp_payload_error = (! (axi4ReadOnlyDecoder_1_io_input_r_payload_resp == 2'b00));
   always @(*) begin
     axi_core_cpu_dBus_cmd_ready = toplevel_axi_core_cpu_dBus_cmd_m2sPipe_ready;
@@ -1064,9 +1104,9 @@ module mycpu (
   assign dbus_axi_r_payload_data = toplevel_dbus_axi_decoder_io_input_r_m2sPipe_payload_data;
   assign dbus_axi_r_payload_resp = toplevel_dbus_axi_decoder_io_input_r_m2sPipe_payload_resp;
   assign dbus_axi_r_payload_last = toplevel_dbus_axi_decoder_io_input_r_m2sPipe_payload_last;
-  assign axi_ram_io_axi_arbiter_io_readInputs_0_ar_payload_addr = toplevel_axi4ReadOnlyDecoder_1_io_outputs_0_ar_validPipe_payload_addr[11:0];
+  assign axi_ram_io_axi_arbiter_io_readInputs_0_ar_payload_addr = toplevel_axi4ReadOnlyDecoder_1_io_outputs_0_ar_validPipe_payload_addr[12:0];
   assign _zz_io_readInputs_0_ar_payload_id[2 : 0] = 3'b000;
-  assign axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr = toplevel_dbus_axi_decoder_io_sharedOutputs_0_arw_validPipe_payload_addr[11:0];
+  assign axi_ram_io_axi_arbiter_io_sharedInputs_0_arw_payload_addr = toplevel_dbus_axi_decoder_io_sharedOutputs_0_arw_validPipe_payload_addr[12:0];
   assign _zz_io_sharedInputs_0_arw_payload_id[2 : 0] = 3'b000;
   assign toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_fire = (toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_valid && toplevel_axi_ram_io_axi_arbiter_io_output_arw_halfPipe_ready);
   assign axi_ram_io_axi_arbiter_io_output_arw_ready = (! toplevel_axi_ram_io_axi_arbiter_io_output_arw_rValid);
@@ -1118,16 +1158,20 @@ module mycpu (
   assign axi_gpioBCtrl_io_apb_PADDR = apb3Router_1_io_outputs_1_PADDR[3:0];
   assign axi_uartCtrl_io_apb_PADDR = apb3Router_1_io_outputs_2_PADDR[4:0];
   assign axi_timerCtrl_io_apb_PADDR = apb3Router_1_io_outputs_3_PADDR[7:0];
+  assign axi_spiCtrl_io_apb_PADDR = apb3Router_1_io_outputs_4_PADDR[7:0];
   assign io_gpioA_write = axi_gpioACtrl_io_gpio_write;
   assign io_gpioA_writeEnable = axi_gpioACtrl_io_gpio_writeEnable;
   assign io_gpioB_write = axi_gpioBCtrl_io_gpio_write;
   assign io_gpioB_writeEnable = axi_gpioBCtrl_io_gpio_writeEnable;
   assign io_uart_txd = axi_uartCtrl_io_uart_txd;
+  assign io_spi_ss = axi_spiCtrl_io_spi_ss;
+  assign io_spi_sclk = axi_spiCtrl_io_spi_sclk;
+  assign io_spi_mosi = axi_spiCtrl_io_spi_mosi;
   always @(posedge io_axiClk) begin
-    if(when_mycpu_l212) begin
+    if(when_mycpu_l224) begin
       resetCtrl_systemResetCounter <= (resetCtrl_systemResetCounter + 6'h01);
     end
-    if(when_mycpu_l216) begin
+    if(when_mycpu_l228) begin
       resetCtrl_systemResetCounter <= 6'h0;
     end
   end
@@ -1304,7 +1348,7 @@ endmodule
 
 module Apb3Router (
   input  wire [19:0]   io_input_PADDR,
-  input  wire [3:0]    io_input_PSEL,
+  input  wire [4:0]    io_input_PSEL,
   input  wire          io_input_PENABLE,
   output wire          io_input_PREADY,
   input  wire          io_input_PWRITE,
@@ -1343,6 +1387,14 @@ module Apb3Router (
   output wire [31:0]   io_outputs_3_PWDATA,
   input  wire [31:0]   io_outputs_3_PRDATA,
   input  wire          io_outputs_3_PSLVERROR,
+  output wire [19:0]   io_outputs_4_PADDR,
+  output wire [0:0]    io_outputs_4_PSEL,
+  output wire          io_outputs_4_PENABLE,
+  input  wire          io_outputs_4_PREADY,
+  output wire          io_outputs_4_PWRITE,
+  output wire [31:0]   io_outputs_4_PWDATA,
+  input  wire [31:0]   io_outputs_4_PRDATA,
+  input  wire          io_outputs_4_PSLVERROR,
   input  wire          io_axiClk,
   input  wire          resetCtrl_axiReset
 );
@@ -1353,29 +1405,35 @@ module Apb3Router (
   wire                _zz_selIndex;
   wire                _zz_selIndex_1;
   wire                _zz_selIndex_2;
-  reg        [1:0]    selIndex;
+  wire                _zz_selIndex_3;
+  reg        [2:0]    selIndex;
 
   always @(*) begin
     case(selIndex)
-      2'b00 : begin
+      3'b000 : begin
         _zz_io_input_PREADY = io_outputs_0_PREADY;
         _zz_io_input_PRDATA = io_outputs_0_PRDATA;
         _zz_io_input_PSLVERROR = io_outputs_0_PSLVERROR;
       end
-      2'b01 : begin
+      3'b001 : begin
         _zz_io_input_PREADY = io_outputs_1_PREADY;
         _zz_io_input_PRDATA = io_outputs_1_PRDATA;
         _zz_io_input_PSLVERROR = io_outputs_1_PSLVERROR;
       end
-      2'b10 : begin
+      3'b010 : begin
         _zz_io_input_PREADY = io_outputs_2_PREADY;
         _zz_io_input_PRDATA = io_outputs_2_PRDATA;
         _zz_io_input_PSLVERROR = io_outputs_2_PSLVERROR;
       end
-      default : begin
+      3'b011 : begin
         _zz_io_input_PREADY = io_outputs_3_PREADY;
         _zz_io_input_PRDATA = io_outputs_3_PRDATA;
         _zz_io_input_PSLVERROR = io_outputs_3_PSLVERROR;
+      end
+      default : begin
+        _zz_io_input_PREADY = io_outputs_4_PREADY;
+        _zz_io_input_PRDATA = io_outputs_4_PRDATA;
+        _zz_io_input_PSLVERROR = io_outputs_4_PSLVERROR;
       end
     endcase
   end
@@ -1400,14 +1458,20 @@ module Apb3Router (
   assign io_outputs_3_PSEL[0] = io_input_PSEL[3];
   assign io_outputs_3_PWRITE = io_input_PWRITE;
   assign io_outputs_3_PWDATA = io_input_PWDATA;
+  assign io_outputs_4_PADDR = io_input_PADDR;
+  assign io_outputs_4_PENABLE = io_input_PENABLE;
+  assign io_outputs_4_PSEL[0] = io_input_PSEL[4];
+  assign io_outputs_4_PWRITE = io_input_PWRITE;
+  assign io_outputs_4_PWDATA = io_input_PWDATA;
   assign _zz_selIndex = io_input_PSEL[3];
-  assign _zz_selIndex_1 = (io_input_PSEL[1] || _zz_selIndex);
-  assign _zz_selIndex_2 = (io_input_PSEL[2] || _zz_selIndex);
+  assign _zz_selIndex_1 = io_input_PSEL[4];
+  assign _zz_selIndex_2 = (io_input_PSEL[1] || _zz_selIndex);
+  assign _zz_selIndex_3 = (io_input_PSEL[2] || _zz_selIndex);
   assign io_input_PREADY = _zz_io_input_PREADY;
   assign io_input_PRDATA = _zz_io_input_PRDATA;
   assign io_input_PSLVERROR = _zz_io_input_PSLVERROR;
   always @(posedge io_axiClk) begin
-    selIndex <= {_zz_selIndex_2,_zz_selIndex_1};
+    selIndex <= {_zz_selIndex_1,{_zz_selIndex_3,_zz_selIndex_2}};
   end
 
 
@@ -1423,7 +1487,7 @@ module Apb3Decoder (
   output wire [31:0]   io_input_PRDATA,
   output reg           io_input_PSLVERROR,
   output wire [19:0]   io_output_PADDR,
-  output reg  [3:0]    io_output_PSEL,
+  output reg  [4:0]    io_output_PSEL,
   output wire          io_output_PENABLE,
   input  wire          io_output_PREADY,
   output wire          io_output_PWRITE,
@@ -1443,6 +1507,7 @@ module Apb3Decoder (
     io_output_PSEL[1] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h01000) && io_input_PSEL[0]);
     io_output_PSEL[2] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h10000) && io_input_PSEL[0]);
     io_output_PSEL[3] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h20000) && io_input_PSEL[0]);
+    io_output_PSEL[4] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h30000) && io_input_PSEL[0]);
   end
 
   always @(*) begin
@@ -1460,7 +1525,7 @@ module Apb3Decoder (
     end
   end
 
-  assign when_Apb3Decoder_l88 = (io_input_PSEL[0] && (io_output_PSEL == 4'b0000));
+  assign when_Apb3Decoder_l88 = (io_input_PSEL[0] && (io_output_PSEL == 5'h0));
 
 endmodule
 
@@ -1729,7 +1794,7 @@ endmodule
 module Axi4SharedArbiter (
   input  wire          io_readInputs_0_ar_valid,
   output wire          io_readInputs_0_ar_ready,
-  input  wire [11:0]   io_readInputs_0_ar_payload_addr,
+  input  wire [12:0]   io_readInputs_0_ar_payload_addr,
   input  wire [2:0]    io_readInputs_0_ar_payload_id,
   input  wire [7:0]    io_readInputs_0_ar_payload_len,
   input  wire [2:0]    io_readInputs_0_ar_payload_size,
@@ -1742,7 +1807,7 @@ module Axi4SharedArbiter (
   output wire          io_readInputs_0_r_payload_last,
   input  wire          io_sharedInputs_0_arw_valid,
   output wire          io_sharedInputs_0_arw_ready,
-  input  wire [11:0]   io_sharedInputs_0_arw_payload_addr,
+  input  wire [12:0]   io_sharedInputs_0_arw_payload_addr,
   input  wire [2:0]    io_sharedInputs_0_arw_payload_id,
   input  wire [7:0]    io_sharedInputs_0_arw_payload_len,
   input  wire [2:0]    io_sharedInputs_0_arw_payload_size,
@@ -1765,7 +1830,7 @@ module Axi4SharedArbiter (
   output wire          io_sharedInputs_0_r_payload_last,
   output wire          io_output_arw_valid,
   input  wire          io_output_arw_ready,
-  output wire [11:0]   io_output_arw_payload_addr,
+  output wire [12:0]   io_output_arw_payload_addr,
   output wire [3:0]    io_output_arw_payload_id,
   output wire [7:0]    io_output_arw_payload_len,
   output wire [2:0]    io_output_arw_payload_size,
@@ -1795,7 +1860,7 @@ module Axi4SharedArbiter (
   wire                cmdArbiter_io_inputs_0_ready;
   wire                cmdArbiter_io_inputs_1_ready;
   wire                cmdArbiter_io_output_valid;
-  wire       [11:0]   cmdArbiter_io_output_payload_addr;
+  wire       [12:0]   cmdArbiter_io_output_payload_addr;
   wire       [2:0]    cmdArbiter_io_output_payload_id;
   wire       [7:0]    cmdArbiter_io_output_payload_len;
   wire       [2:0]    cmdArbiter_io_output_payload_size;
@@ -1813,7 +1878,7 @@ module Axi4SharedArbiter (
   reg                 _zz_io_output_r_ready;
   wire                inputsCmd_0_valid;
   wire                inputsCmd_0_ready;
-  wire       [11:0]   inputsCmd_0_payload_addr;
+  wire       [12:0]   inputsCmd_0_payload_addr;
   wire       [2:0]    inputsCmd_0_payload_id;
   wire       [7:0]    inputsCmd_0_payload_len;
   wire       [2:0]    inputsCmd_0_payload_size;
@@ -1821,7 +1886,7 @@ module Axi4SharedArbiter (
   wire                inputsCmd_0_payload_write;
   wire                inputsCmd_1_valid;
   wire                inputsCmd_1_ready;
-  wire       [11:0]   inputsCmd_1_payload_addr;
+  wire       [12:0]   inputsCmd_1_payload_addr;
   wire       [2:0]    inputsCmd_1_payload_id;
   wire       [7:0]    inputsCmd_1_payload_len;
   wire       [2:0]    inputsCmd_1_payload_size;
@@ -1829,7 +1894,7 @@ module Axi4SharedArbiter (
   wire                inputsCmd_1_payload_write;
   wire                cmdOutputFork_valid;
   wire                cmdOutputFork_ready;
-  wire       [11:0]   cmdOutputFork_payload_addr;
+  wire       [12:0]   cmdOutputFork_payload_addr;
   wire       [2:0]    cmdOutputFork_payload_id;
   wire       [7:0]    cmdOutputFork_payload_len;
   wire       [2:0]    cmdOutputFork_payload_size;
@@ -1837,7 +1902,7 @@ module Axi4SharedArbiter (
   wire                cmdOutputFork_payload_write;
   wire                cmdRouteFork_valid;
   reg                 cmdRouteFork_ready;
-  wire       [11:0]   cmdRouteFork_payload_addr;
+  wire       [12:0]   cmdRouteFork_payload_addr;
   wire       [2:0]    cmdRouteFork_payload_id;
   wire       [7:0]    cmdRouteFork_payload_len;
   wire       [2:0]    cmdRouteFork_payload_size;
@@ -1853,7 +1918,7 @@ module Axi4SharedArbiter (
   wire                when_Stream_l445;
   reg                 cmdRouteFork_thrown_valid;
   wire                cmdRouteFork_thrown_ready;
-  wire       [11:0]   cmdRouteFork_thrown_payload_addr;
+  wire       [12:0]   cmdRouteFork_thrown_payload_addr;
   wire       [2:0]    cmdRouteFork_thrown_payload_id;
   wire       [7:0]    cmdRouteFork_thrown_payload_len;
   wire       [2:0]    cmdRouteFork_thrown_payload_size;
@@ -1878,7 +1943,7 @@ module Axi4SharedArbiter (
   StreamArbiter_1 cmdArbiter (
     .io_inputs_0_valid         (inputsCmd_0_valid                      ), //i
     .io_inputs_0_ready         (cmdArbiter_io_inputs_0_ready           ), //o
-    .io_inputs_0_payload_addr  (inputsCmd_0_payload_addr[11:0]         ), //i
+    .io_inputs_0_payload_addr  (inputsCmd_0_payload_addr[12:0]         ), //i
     .io_inputs_0_payload_id    (inputsCmd_0_payload_id[2:0]            ), //i
     .io_inputs_0_payload_len   (inputsCmd_0_payload_len[7:0]           ), //i
     .io_inputs_0_payload_size  (inputsCmd_0_payload_size[2:0]          ), //i
@@ -1886,7 +1951,7 @@ module Axi4SharedArbiter (
     .io_inputs_0_payload_write (inputsCmd_0_payload_write              ), //i
     .io_inputs_1_valid         (inputsCmd_1_valid                      ), //i
     .io_inputs_1_ready         (cmdArbiter_io_inputs_1_ready           ), //o
-    .io_inputs_1_payload_addr  (inputsCmd_1_payload_addr[11:0]         ), //i
+    .io_inputs_1_payload_addr  (inputsCmd_1_payload_addr[12:0]         ), //i
     .io_inputs_1_payload_id    (inputsCmd_1_payload_id[2:0]            ), //i
     .io_inputs_1_payload_len   (inputsCmd_1_payload_len[7:0]           ), //i
     .io_inputs_1_payload_size  (inputsCmd_1_payload_size[2:0]          ), //i
@@ -1894,7 +1959,7 @@ module Axi4SharedArbiter (
     .io_inputs_1_payload_write (inputsCmd_1_payload_write              ), //i
     .io_output_valid           (cmdArbiter_io_output_valid             ), //o
     .io_output_ready           (cmdArbiter_io_output_ready             ), //i
-    .io_output_payload_addr    (cmdArbiter_io_output_payload_addr[11:0]), //o
+    .io_output_payload_addr    (cmdArbiter_io_output_payload_addr[12:0]), //o
     .io_output_payload_id      (cmdArbiter_io_output_payload_id[2:0]   ), //o
     .io_output_payload_len     (cmdArbiter_io_output_payload_len[7:0]  ), //o
     .io_output_payload_size    (cmdArbiter_io_output_payload_size[2:0] ), //o
@@ -2285,7 +2350,7 @@ module Axi4SharedDecoder (
 
   assign when_Utils_l737 = ((! pendingDataCounter_incrementIt) && pendingDataCounter_decrementIt);
   assign pendingDataCounter_valueNext = (pendingDataCounter_value + pendingDataCounter_finalIncrement);
-  assign decodedCmdSels = {((io_input_arw_payload_addr & (~ 32'h000fffff)) == 32'hf0000000),((io_input_arw_payload_addr & (~ 32'h00000fff)) == 32'h80000000)};
+  assign decodedCmdSels = {((io_input_arw_payload_addr & (~ 32'h000fffff)) == 32'hf0000000),((io_input_arw_payload_addr & (~ 32'h00001fff)) == 32'h80000000)};
   assign decodedCmdError = (decodedCmdSels == 2'b00);
   assign allowCmd = ((pendingCmdCounter == 3'b000) || ((pendingCmdCounter != 3'b111) && (pendingSels == decodedCmdSels)));
   assign allowData = (pendingDataCounter_value != 3'b000);
@@ -2483,7 +2548,7 @@ module Axi4ReadOnlyDecoder (
 
   assign when_Utils_l737 = ((! pendingCmdCounter_incrementIt) && pendingCmdCounter_decrementIt);
   assign pendingCmdCounter_valueNext = (pendingCmdCounter_value + pendingCmdCounter_finalIncrement);
-  assign decodedCmdSels = (((io_input_ar_payload_addr & (~ 32'h00000fff)) == 32'h80000000) && io_input_ar_valid);
+  assign decodedCmdSels = (((io_input_ar_payload_addr & (~ 32'h00001fff)) == 32'h80000000) && io_input_ar_valid);
   assign decodedCmdError = (decodedCmdSels == 1'b0);
   assign allowCmd = ((pendingCmdCounter_value == 3'b000) || ((pendingCmdCounter_value != 3'b111) && (pendingSels == decodedCmdSels)));
   assign io_input_ar_ready = (((|(decodedCmdSels & io_outputs_0_ar_ready)) || (decodedCmdError && errorSlave_io_axi_ar_ready)) && allowCmd);
@@ -7374,6 +7439,288 @@ module VexRiscv (
 
 endmodule
 
+module Apb3SpiMasterCtrl (
+  input  wire [7:0]    io_apb_PADDR,
+  input  wire [0:0]    io_apb_PSEL,
+  input  wire          io_apb_PENABLE,
+  output wire          io_apb_PREADY,
+  input  wire          io_apb_PWRITE,
+  input  wire [31:0]   io_apb_PWDATA,
+  output reg  [31:0]   io_apb_PRDATA,
+  output wire [0:0]    io_spi_ss,
+  output wire          io_spi_sclk,
+  output wire          io_spi_mosi,
+  input  wire          io_spi_miso,
+  output wire          io_interrupt,
+  input  wire          io_axiClk,
+  input  wire          resetCtrl_axiReset
+);
+  localparam SpiMasterCtrlCmdMode_DATA = 1'd0;
+  localparam SpiMasterCtrlCmdMode_SS = 1'd1;
+
+  reg                 axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_ready;
+  wire                spiCtrl_io_cmd_ready;
+  wire                spiCtrl_io_rsp_valid;
+  wire       [7:0]    spiCtrl_io_rsp_payload;
+  wire                spiCtrl_io_spi_sclk;
+  wire                spiCtrl_io_spi_mosi;
+  wire       [0:0]    spiCtrl_io_spi_ss;
+  wire                bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_push_ready;
+  wire                bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_valid;
+  wire       [0:0]    bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_payload_mode;
+  wire       [8:0]    bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_payload_args;
+  wire       [4:0]    bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_occupancy;
+  wire       [4:0]    bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_availability;
+  wire                axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_push_ready;
+  wire                axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_valid;
+  wire       [7:0]    axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_payload;
+  wire       [4:0]    axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_occupancy;
+  wire       [4:0]    axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_availability;
+  wire       [0:0]    _zz_bridge_cmdLogic_streamUnbuffered_payload_args;
+  wire                busCtrl_readErrorFlag;
+  wire                busCtrl_writeErrorFlag;
+  wire                busCtrl_askWrite;
+  wire                busCtrl_askRead;
+  wire                busCtrl_doWrite;
+  wire                busCtrl_doRead;
+  wire                bridge_cmdLogic_streamUnbuffered_valid;
+  wire                bridge_cmdLogic_streamUnbuffered_ready;
+  wire       [0:0]    bridge_cmdLogic_streamUnbuffered_payload_mode;
+  reg        [8:0]    bridge_cmdLogic_streamUnbuffered_payload_args;
+  reg                 _zz_bridge_cmdLogic_streamUnbuffered_valid;
+  wire       [7:0]    bridge_cmdLogic_dataCmd_data;
+  wire                bridge_cmdLogic_dataCmd_read;
+  wire                axi_spiCtrl_spiCtrl_io_rsp_toStream_valid;
+  wire                axi_spiCtrl_spiCtrl_io_rsp_toStream_ready;
+  wire       [7:0]    axi_spiCtrl_spiCtrl_io_rsp_toStream_payload;
+  reg                 bridge_interruptCtrl_cmdIntEnable;
+  reg                 bridge_interruptCtrl_rspIntEnable;
+  wire                bridge_interruptCtrl_cmdInt;
+  wire                bridge_interruptCtrl_rspInt;
+  wire                bridge_interruptCtrl_interrupt;
+  reg                 _zz_io_config_kind_cpol;
+  reg                 _zz_io_config_kind_cpha;
+  reg        [31:0]   _zz_io_config_sclkToggle;
+  reg        [0:0]    _zz_io_config_ss_activeHigh;
+  reg        [31:0]   _zz_io_config_ss_setup;
+  reg        [31:0]   _zz_io_config_ss_hold;
+  reg        [31:0]   _zz_io_config_ss_disable;
+  wire       [0:0]    _zz_bridge_cmdLogic_streamUnbuffered_payload_mode;
+  wire       [1:0]    _zz_io_config_kind_cpol_1;
+  `ifndef SYNTHESIS
+  reg [31:0] bridge_cmdLogic_streamUnbuffered_payload_mode_string;
+  reg [31:0] _zz_bridge_cmdLogic_streamUnbuffered_payload_mode_string;
+  `endif
+
+
+  assign _zz_bridge_cmdLogic_streamUnbuffered_payload_args = io_apb_PWDATA[24];
+  SpiMasterCtrl spiCtrl (
+    .io_config_kind_cpol     (_zz_io_config_kind_cpol                                                        ), //i
+    .io_config_kind_cpha     (_zz_io_config_kind_cpha                                                        ), //i
+    .io_config_sclkToggle    (_zz_io_config_sclkToggle[31:0]                                                 ), //i
+    .io_config_ss_activeHigh (_zz_io_config_ss_activeHigh                                                    ), //i
+    .io_config_ss_setup      (_zz_io_config_ss_setup[31:0]                                                   ), //i
+    .io_config_ss_hold       (_zz_io_config_ss_hold[31:0]                                                    ), //i
+    .io_config_ss_disable    (_zz_io_config_ss_disable[31:0]                                                 ), //i
+    .io_cmd_valid            (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_valid            ), //i
+    .io_cmd_ready            (spiCtrl_io_cmd_ready                                                           ), //o
+    .io_cmd_payload_mode     (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_payload_mode     ), //i
+    .io_cmd_payload_args     (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_payload_args[8:0]), //i
+    .io_rsp_valid            (spiCtrl_io_rsp_valid                                                           ), //o
+    .io_rsp_payload          (spiCtrl_io_rsp_payload[7:0]                                                    ), //o
+    .io_spi_ss               (spiCtrl_io_spi_ss                                                              ), //o
+    .io_spi_sclk             (spiCtrl_io_spi_sclk                                                            ), //o
+    .io_spi_mosi             (spiCtrl_io_spi_mosi                                                            ), //o
+    .io_spi_miso             (io_spi_miso                                                                    ), //i
+    .io_axiClk               (io_axiClk                                                                      ), //i
+    .resetCtrl_axiReset      (resetCtrl_axiReset                                                             )  //i
+  );
+  StreamFifo bridge_cmdLogic_streamUnbuffered_queueWithAvailability (
+    .io_push_valid        (bridge_cmdLogic_streamUnbuffered_valid                                         ), //i
+    .io_push_ready        (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_push_ready           ), //o
+    .io_push_payload_mode (bridge_cmdLogic_streamUnbuffered_payload_mode                                  ), //i
+    .io_push_payload_args (bridge_cmdLogic_streamUnbuffered_payload_args[8:0]                             ), //i
+    .io_pop_valid         (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_valid            ), //o
+    .io_pop_ready         (spiCtrl_io_cmd_ready                                                           ), //i
+    .io_pop_payload_mode  (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_payload_mode     ), //o
+    .io_pop_payload_args  (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_payload_args[8:0]), //o
+    .io_flush             (1'b0                                                                           ), //i
+    .io_occupancy         (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_occupancy[4:0]       ), //o
+    .io_availability      (bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_availability[4:0]    ), //o
+    .io_axiClk            (io_axiClk                                                                      ), //i
+    .resetCtrl_axiReset   (resetCtrl_axiReset                                                             )  //i
+  );
+  StreamFifo_1 axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy (
+    .io_push_valid      (axi_spiCtrl_spiCtrl_io_rsp_toStream_valid                         ), //i
+    .io_push_ready      (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_push_ready       ), //o
+    .io_push_payload    (axi_spiCtrl_spiCtrl_io_rsp_toStream_payload[7:0]                  ), //i
+    .io_pop_valid       (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_valid        ), //o
+    .io_pop_ready       (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_ready        ), //i
+    .io_pop_payload     (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_payload[7:0] ), //o
+    .io_flush           (1'b0                                                              ), //i
+    .io_occupancy       (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_occupancy[4:0]   ), //o
+    .io_availability    (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_availability[4:0]), //o
+    .io_axiClk          (io_axiClk                                                         ), //i
+    .resetCtrl_axiReset (resetCtrl_axiReset                                                )  //i
+  );
+  `ifndef SYNTHESIS
+  always @(*) begin
+    case(bridge_cmdLogic_streamUnbuffered_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : bridge_cmdLogic_streamUnbuffered_payload_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : bridge_cmdLogic_streamUnbuffered_payload_mode_string = "SS  ";
+      default : bridge_cmdLogic_streamUnbuffered_payload_mode_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(_zz_bridge_cmdLogic_streamUnbuffered_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : _zz_bridge_cmdLogic_streamUnbuffered_payload_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : _zz_bridge_cmdLogic_streamUnbuffered_payload_mode_string = "SS  ";
+      default : _zz_bridge_cmdLogic_streamUnbuffered_payload_mode_string = "????";
+    endcase
+  end
+  `endif
+
+  assign io_spi_ss = spiCtrl_io_spi_ss;
+  assign io_spi_sclk = spiCtrl_io_spi_sclk;
+  assign io_spi_mosi = spiCtrl_io_spi_mosi;
+  assign busCtrl_readErrorFlag = 1'b0;
+  assign busCtrl_writeErrorFlag = 1'b0;
+  assign io_apb_PREADY = 1'b1;
+  always @(*) begin
+    io_apb_PRDATA = 32'h0;
+    case(io_apb_PADDR)
+      8'h0 : begin
+        io_apb_PRDATA[31 : 31] = (axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_valid ^ 1'b0);
+        io_apb_PRDATA[7 : 0] = axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_payload;
+        io_apb_PRDATA[20 : 16] = axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_occupancy;
+      end
+      8'h04 : begin
+        io_apb_PRDATA[20 : 16] = bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_availability;
+        io_apb_PRDATA[0 : 0] = bridge_interruptCtrl_cmdIntEnable;
+        io_apb_PRDATA[1 : 1] = bridge_interruptCtrl_rspIntEnable;
+        io_apb_PRDATA[8 : 8] = bridge_interruptCtrl_cmdInt;
+        io_apb_PRDATA[9 : 9] = bridge_interruptCtrl_rspInt;
+      end
+      default : begin
+      end
+    endcase
+  end
+
+  assign busCtrl_askWrite = ((io_apb_PSEL[0] && io_apb_PENABLE) && io_apb_PWRITE);
+  assign busCtrl_askRead = ((io_apb_PSEL[0] && io_apb_PENABLE) && (! io_apb_PWRITE));
+  assign busCtrl_doWrite = (((io_apb_PSEL[0] && io_apb_PENABLE) && io_apb_PREADY) && io_apb_PWRITE);
+  assign busCtrl_doRead = (((io_apb_PSEL[0] && io_apb_PENABLE) && io_apb_PREADY) && (! io_apb_PWRITE));
+  always @(*) begin
+    _zz_bridge_cmdLogic_streamUnbuffered_valid = 1'b0;
+    case(io_apb_PADDR)
+      8'h0 : begin
+        if(busCtrl_doWrite) begin
+          _zz_bridge_cmdLogic_streamUnbuffered_valid = 1'b1;
+        end
+      end
+      default : begin
+      end
+    endcase
+  end
+
+  assign bridge_cmdLogic_streamUnbuffered_valid = _zz_bridge_cmdLogic_streamUnbuffered_valid;
+  always @(*) begin
+    case(bridge_cmdLogic_streamUnbuffered_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : begin
+        bridge_cmdLogic_streamUnbuffered_payload_args = {bridge_cmdLogic_dataCmd_read,bridge_cmdLogic_dataCmd_data};
+      end
+      default : begin
+        bridge_cmdLogic_streamUnbuffered_payload_args = {8'd0, _zz_bridge_cmdLogic_streamUnbuffered_payload_args};
+      end
+    endcase
+  end
+
+  assign bridge_cmdLogic_streamUnbuffered_ready = bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_push_ready;
+  assign axi_spiCtrl_spiCtrl_io_rsp_toStream_valid = spiCtrl_io_rsp_valid;
+  assign axi_spiCtrl_spiCtrl_io_rsp_toStream_payload = spiCtrl_io_rsp_payload;
+  assign axi_spiCtrl_spiCtrl_io_rsp_toStream_ready = axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_push_ready;
+  always @(*) begin
+    axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_ready = 1'b0;
+    case(io_apb_PADDR)
+      8'h0 : begin
+        if(busCtrl_doRead) begin
+          axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_ready = 1'b1;
+        end
+      end
+      default : begin
+      end
+    endcase
+  end
+
+  assign bridge_interruptCtrl_cmdInt = (bridge_interruptCtrl_cmdIntEnable && (! bridge_cmdLogic_streamUnbuffered_queueWithAvailability_io_pop_valid));
+  assign bridge_interruptCtrl_rspInt = (bridge_interruptCtrl_rspIntEnable && axi_spiCtrl_spiCtrl_io_rsp_queueWithOccupancy_io_pop_valid);
+  assign bridge_interruptCtrl_interrupt = (bridge_interruptCtrl_rspInt || bridge_interruptCtrl_cmdInt);
+  assign io_interrupt = bridge_interruptCtrl_interrupt;
+  assign bridge_cmdLogic_dataCmd_data = io_apb_PWDATA[7 : 0];
+  assign bridge_cmdLogic_dataCmd_read = io_apb_PWDATA[24];
+  assign _zz_bridge_cmdLogic_streamUnbuffered_payload_mode = io_apb_PWDATA[28 : 28];
+  assign bridge_cmdLogic_streamUnbuffered_payload_mode = _zz_bridge_cmdLogic_streamUnbuffered_payload_mode;
+  assign _zz_io_config_kind_cpol_1 = io_apb_PWDATA[1 : 0];
+  always @(posedge io_axiClk or posedge resetCtrl_axiReset) begin
+    if(resetCtrl_axiReset) begin
+      bridge_interruptCtrl_cmdIntEnable <= 1'b0;
+      bridge_interruptCtrl_rspIntEnable <= 1'b0;
+      _zz_io_config_ss_activeHigh <= 1'b0;
+    end else begin
+      case(io_apb_PADDR)
+        8'h04 : begin
+          if(busCtrl_doWrite) begin
+            bridge_interruptCtrl_cmdIntEnable <= io_apb_PWDATA[0];
+            bridge_interruptCtrl_rspIntEnable <= io_apb_PWDATA[1];
+          end
+        end
+        8'h08 : begin
+          if(busCtrl_doWrite) begin
+            _zz_io_config_ss_activeHigh <= io_apb_PWDATA[4 : 4];
+          end
+        end
+        default : begin
+        end
+      endcase
+    end
+  end
+
+  always @(posedge io_axiClk) begin
+    case(io_apb_PADDR)
+      8'h08 : begin
+        if(busCtrl_doWrite) begin
+          _zz_io_config_kind_cpol <= _zz_io_config_kind_cpol_1[0];
+          _zz_io_config_kind_cpha <= _zz_io_config_kind_cpol_1[1];
+        end
+      end
+      8'h0c : begin
+        if(busCtrl_doWrite) begin
+          _zz_io_config_sclkToggle <= io_apb_PWDATA[31 : 0];
+        end
+      end
+      8'h10 : begin
+        if(busCtrl_doWrite) begin
+          _zz_io_config_ss_setup <= io_apb_PWDATA[31 : 0];
+        end
+      end
+      8'h14 : begin
+        if(busCtrl_doWrite) begin
+          _zz_io_config_ss_hold <= io_apb_PWDATA[31 : 0];
+        end
+      end
+      8'h18 : begin
+        if(busCtrl_doWrite) begin
+          _zz_io_config_ss_disable <= io_apb_PWDATA[31 : 0];
+        end
+      end
+      default : begin
+      end
+    endcase
+  end
+
+
+endmodule
+
 module Apb3UartCtrl (
   input  wire [4:0]    io_apb_PADDR /* verilator public */ ,
   input  wire [0:0]    io_apb_PSEL /* verilator public */ ,
@@ -7404,19 +7751,19 @@ module Apb3UartCtrl (
   wire                bridge_write_streamUnbuffered_queueWithOccupancy_io_push_ready;
   wire                bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid;
   wire       [7:0]    bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_payload;
-  wire       [4:0]    bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy;
-  wire       [4:0]    bridge_write_streamUnbuffered_queueWithOccupancy_io_availability;
+  wire       [5:0]    bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy;
+  wire       [5:0]    bridge_write_streamUnbuffered_queueWithOccupancy_io_availability;
   wire                axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_push_ready;
   wire                axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_pop_valid;
   wire       [7:0]    axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_pop_payload;
-  wire       [4:0]    axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_occupancy;
-  wire       [4:0]    axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_availability;
+  wire       [5:0]    axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_occupancy;
+  wire       [5:0]    axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_availability;
   wire       [0:0]    _zz_bridge_misc_readError;
   wire       [0:0]    _zz_bridge_misc_readOverflowError;
   wire       [0:0]    _zz_bridge_misc_breakDetected;
   wire       [0:0]    _zz_bridge_misc_doBreak;
   wire       [0:0]    _zz_bridge_misc_doBreak_1;
-  wire       [4:0]    _zz_io_apb_PRDATA;
+  wire       [5:0]    _zz_io_apb_PRDATA;
   wire                busCtrl_readErrorFlag;
   wire                busCtrl_writeErrorFlag;
   wire                busCtrl_askWrite;
@@ -7474,7 +7821,7 @@ module Apb3UartCtrl (
   assign _zz_bridge_misc_breakDetected = 1'b0;
   assign _zz_bridge_misc_doBreak = 1'b1;
   assign _zz_bridge_misc_doBreak_1 = 1'b0;
-  assign _zz_io_apb_PRDATA = (5'h10 - bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy);
+  assign _zz_io_apb_PRDATA = (6'h20 - bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy);
   UartCtrl uartCtrl_1 (
     .io_config_frame_dataLength (bridge_uartConfigReg_frame_dataLength[2:0]                          ), //i
     .io_config_frame_stop       (bridge_uartConfigReg_frame_stop                                     ), //i
@@ -7494,7 +7841,7 @@ module Apb3UartCtrl (
     .io_axiClk                  (io_axiClk                                                           ), //i
     .resetCtrl_axiReset         (resetCtrl_axiReset                                                  )  //i
   );
-  StreamFifo bridge_write_streamUnbuffered_queueWithOccupancy (
+  StreamFifo_2 bridge_write_streamUnbuffered_queueWithOccupancy (
     .io_push_valid      (bridge_write_streamUnbuffered_valid                                  ), //i
     .io_push_ready      (bridge_write_streamUnbuffered_queueWithOccupancy_io_push_ready       ), //o
     .io_push_payload    (bridge_write_streamUnbuffered_payload[7:0]                           ), //i
@@ -7502,12 +7849,12 @@ module Apb3UartCtrl (
     .io_pop_ready       (uartCtrl_1_io_write_ready                                            ), //i
     .io_pop_payload     (bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_payload[7:0] ), //o
     .io_flush           (1'b0                                                                 ), //i
-    .io_occupancy       (bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy[4:0]   ), //o
-    .io_availability    (bridge_write_streamUnbuffered_queueWithOccupancy_io_availability[4:0]), //o
+    .io_occupancy       (bridge_write_streamUnbuffered_queueWithOccupancy_io_occupancy[5:0]   ), //o
+    .io_availability    (bridge_write_streamUnbuffered_queueWithOccupancy_io_availability[5:0]), //o
     .io_axiClk          (io_axiClk                                                            ), //i
     .resetCtrl_axiReset (resetCtrl_axiReset                                                   )  //i
   );
-  StreamFifo axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy (
+  StreamFifo_2 axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy (
     .io_push_valid      (uartCtrl_1_io_read_valid                                               ), //i
     .io_push_ready      (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_push_ready       ), //o
     .io_push_payload    (uartCtrl_1_io_read_payload[7:0]                                        ), //i
@@ -7515,8 +7862,8 @@ module Apb3UartCtrl (
     .io_pop_ready       (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_pop_ready        ), //i
     .io_pop_payload     (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_pop_payload[7:0] ), //o
     .io_flush           (1'b0                                                                   ), //i
-    .io_occupancy       (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_occupancy[4:0]   ), //o
-    .io_availability    (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_availability[4:0]), //o
+    .io_occupancy       (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_occupancy[5:0]   ), //o
+    .io_availability    (axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_availability[5:0]), //o
     .io_axiClk          (io_axiClk                                                              ), //i
     .resetCtrl_axiReset (resetCtrl_axiReset                                                     )  //i
   );
@@ -7565,9 +7912,9 @@ module Apb3UartCtrl (
         io_apb_PRDATA[7 : 0] = bridge_read_streamBreaked_payload;
       end
       5'h04 : begin
-        io_apb_PRDATA[20 : 16] = _zz_io_apb_PRDATA;
+        io_apb_PRDATA[21 : 16] = _zz_io_apb_PRDATA;
         io_apb_PRDATA[15 : 15] = bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid;
-        io_apb_PRDATA[28 : 24] = axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_occupancy;
+        io_apb_PRDATA[29 : 24] = axi_uartCtrl_uartCtrl_1_io_read_queueWithOccupancy_io_occupancy;
         io_apb_PRDATA[0 : 0] = bridge_interruptCtrl_writeIntEnable;
         io_apb_PRDATA[1 : 1] = bridge_interruptCtrl_readIntEnable;
         io_apb_PRDATA[8 : 8] = bridge_interruptCtrl_writeInt;
@@ -8273,29 +8620,29 @@ module Apb3Gpio (
   input  wire [31:0]   io_apb_PWDATA,
   output reg  [31:0]   io_apb_PRDATA,
   output wire          io_apb_PSLVERROR,
-  input  wire [31:0]   io_gpio_read,
-  output wire [31:0]   io_gpio_write,
-  output wire [31:0]   io_gpio_writeEnable,
-  output wire [31:0]   io_value,
+  input  wire [3:0]    io_gpio_read,
+  output wire [3:0]    io_gpio_write,
+  output wire [3:0]    io_gpio_writeEnable,
+  output wire [3:0]    io_value,
   input  wire          io_axiClk,
   input  wire          resetCtrl_axiReset
 );
 
-  wire       [31:0]   io_gpio_read_buffercc_io_dataOut;
+  wire       [3:0]    io_gpio_read_buffercc_io_dataOut;
   wire                ctrl_readErrorFlag;
   wire                ctrl_writeErrorFlag;
   wire                ctrl_askWrite;
   wire                ctrl_askRead;
   wire                ctrl_doWrite;
   wire                ctrl_doRead;
-  reg        [31:0]   io_gpio_write_driver;
-  reg        [31:0]   io_gpio_writeEnable_driver;
+  reg        [3:0]    io_gpio_write_driver;
+  reg        [3:0]    io_gpio_writeEnable_driver;
 
   (* keep_hierarchy = "TRUE" *) BufferCC_4 io_gpio_read_buffercc (
-    .io_dataIn          (io_gpio_read[31:0]                    ), //i
-    .io_dataOut         (io_gpio_read_buffercc_io_dataOut[31:0]), //o
-    .io_axiClk          (io_axiClk                             ), //i
-    .resetCtrl_axiReset (resetCtrl_axiReset                    )  //i
+    .io_dataIn          (io_gpio_read[3:0]                    ), //i
+    .io_dataOut         (io_gpio_read_buffercc_io_dataOut[3:0]), //o
+    .io_axiClk          (io_axiClk                            ), //i
+    .resetCtrl_axiReset (resetCtrl_axiReset                   )  //i
   );
   assign io_value = io_gpio_read_buffercc_io_dataOut;
   assign ctrl_readErrorFlag = 1'b0;
@@ -8305,13 +8652,13 @@ module Apb3Gpio (
     io_apb_PRDATA = 32'h0;
     case(io_apb_PADDR)
       4'b0000 : begin
-        io_apb_PRDATA[31 : 0] = io_value;
+        io_apb_PRDATA[3 : 0] = io_value;
       end
       4'b0100 : begin
-        io_apb_PRDATA[31 : 0] = io_gpio_write_driver;
+        io_apb_PRDATA[3 : 0] = io_gpio_write_driver;
       end
       4'b1000 : begin
-        io_apb_PRDATA[31 : 0] = io_gpio_writeEnable_driver;
+        io_apb_PRDATA[3 : 0] = io_gpio_writeEnable_driver;
       end
       default : begin
       end
@@ -8327,12 +8674,12 @@ module Apb3Gpio (
   assign io_gpio_writeEnable = io_gpio_writeEnable_driver;
   always @(posedge io_axiClk or posedge resetCtrl_axiReset) begin
     if(resetCtrl_axiReset) begin
-      io_gpio_writeEnable_driver <= 32'h0;
+      io_gpio_writeEnable_driver <= 4'b0000;
     end else begin
       case(io_apb_PADDR)
         4'b1000 : begin
           if(ctrl_doWrite) begin
-            io_gpio_writeEnable_driver <= io_apb_PWDATA[31 : 0];
+            io_gpio_writeEnable_driver <= io_apb_PWDATA[3 : 0];
           end
         end
         default : begin
@@ -8345,7 +8692,7 @@ module Apb3Gpio (
     case(io_apb_PADDR)
       4'b0100 : begin
         if(ctrl_doWrite) begin
-          io_gpio_write_driver <= io_apb_PWDATA[31 : 0];
+          io_gpio_write_driver <= io_apb_PWDATA[3 : 0];
         end
       end
       default : begin
@@ -8585,7 +8932,7 @@ endmodule
 module Axi4SharedOnChipRam (
   input  wire          io_axi_arw_valid,
   output reg           io_axi_arw_ready,
-  input  wire [11:0]   io_axi_arw_payload_addr,
+  input  wire [12:0]   io_axi_arw_payload_addr,
   input  wire [3:0]    io_axi_arw_payload_id,
   input  wire [7:0]    io_axi_arw_payload_len,
   input  wire [2:0]    io_axi_arw_payload_size,
@@ -8631,7 +8978,7 @@ module Axi4SharedOnChipRam (
   reg                 unburstify_result_valid;
   wire                unburstify_result_ready;
   reg                 unburstify_result_payload_last;
-  reg        [11:0]   unburstify_result_payload_fragment_addr;
+  reg        [12:0]   unburstify_result_payload_fragment_addr;
   reg        [3:0]    unburstify_result_payload_fragment_id;
   reg        [2:0]    unburstify_result_payload_fragment_size;
   reg        [1:0]    unburstify_result_payload_fragment_burst;
@@ -8640,14 +8987,15 @@ module Axi4SharedOnChipRam (
   reg                 unburstify_buffer_valid;
   reg        [7:0]    unburstify_buffer_len;
   reg        [7:0]    unburstify_buffer_beat;
-  reg        [11:0]   unburstify_buffer_transaction_addr;
+  reg        [12:0]   unburstify_buffer_transaction_addr;
   reg        [3:0]    unburstify_buffer_transaction_id;
   reg        [2:0]    unburstify_buffer_transaction_size;
   reg        [1:0]    unburstify_buffer_transaction_burst;
   reg                 unburstify_buffer_transaction_write;
   wire                unburstify_buffer_last;
   wire       [1:0]    Axi4Incr_validSize;
-  reg        [11:0]   Axi4Incr_result;
+  reg        [12:0]   Axi4Incr_result;
+  wire       [0:0]    Axi4Incr_highCat;
   wire       [2:0]    Axi4Incr_sizeValue;
   wire       [11:0]   Axi4Incr_alignMask;
   wire       [11:0]   Axi4Incr_base;
@@ -8659,34 +9007,34 @@ module Axi4SharedOnChipRam (
   wire                stage0_valid;
   reg                 stage0_ready;
   wire                stage0_payload_last;
-  wire       [11:0]   stage0_payload_fragment_addr;
+  wire       [12:0]   stage0_payload_fragment_addr;
   wire       [3:0]    stage0_payload_fragment_id;
   wire       [2:0]    stage0_payload_fragment_size;
   wire       [1:0]    stage0_payload_fragment_burst;
   wire                stage0_payload_fragment_write;
-  wire       [9:0]    _zz_io_axi_r_payload_data;
+  wire       [10:0]   _zz_io_axi_r_payload_data;
   wire                stage0_fire;
   wire       [31:0]   _zz_io_axi_r_payload_data_1;
   wire                stage1_valid;
   wire                stage1_ready;
   wire                stage1_payload_last;
-  wire       [11:0]   stage1_payload_fragment_addr;
+  wire       [12:0]   stage1_payload_fragment_addr;
   wire       [3:0]    stage1_payload_fragment_id;
   wire       [2:0]    stage1_payload_fragment_size;
   wire       [1:0]    stage1_payload_fragment_burst;
   wire                stage1_payload_fragment_write;
   reg                 stage0_rValid;
   reg                 stage0_rData_last;
-  reg        [11:0]   stage0_rData_fragment_addr;
+  reg        [12:0]   stage0_rData_fragment_addr;
   reg        [3:0]    stage0_rData_fragment_id;
   reg        [2:0]    stage0_rData_fragment_size;
   reg        [1:0]    stage0_rData_fragment_burst;
   reg                 stage0_rData_fragment_write;
   wire                when_Stream_l375;
-  reg [7:0] ram_symbol0 [0:1023];
-  reg [7:0] ram_symbol1 [0:1023];
-  reg [7:0] ram_symbol2 [0:1023];
-  reg [7:0] ram_symbol3 [0:1023];
+  reg [7:0] ram_symbol0 [0:2047];
+  reg [7:0] ram_symbol1 [0:2047];
+  reg [7:0] ram_symbol2 [0:2047];
+  reg [7:0] ram_symbol3 [0:2047];
   reg [7:0] _zz_ramsymbol_read;
   reg [7:0] _zz_ramsymbol_read_1;
   reg [7:0] _zz_ramsymbol_read_2;
@@ -8754,6 +9102,7 @@ module Axi4SharedOnChipRam (
 
   assign unburstify_buffer_last = (unburstify_buffer_beat == 8'h01);
   assign Axi4Incr_validSize = unburstify_buffer_transaction_size[1 : 0];
+  assign Axi4Incr_highCat = unburstify_buffer_transaction_addr[12 : 12];
   assign Axi4Incr_sizeValue = {(2'b10 == Axi4Incr_validSize),{(2'b01 == Axi4Incr_validSize),(2'b00 == Axi4Incr_validSize)}};
   assign Axi4Incr_alignMask = {10'd0, _zz_Axi4Incr_alignMask};
   assign Axi4Incr_base = (unburstify_buffer_transaction_addr[11 : 0] & (~ Axi4Incr_alignMask));
@@ -8782,10 +9131,10 @@ module Axi4SharedOnChipRam (
         Axi4Incr_result = unburstify_buffer_transaction_addr;
       end
       2'b10 : begin
-        Axi4Incr_result = _zz_Axi4Incr_result;
+        Axi4Incr_result = {Axi4Incr_highCat,_zz_Axi4Incr_result};
       end
       default : begin
-        Axi4Incr_result = Axi4Incr_baseIncr;
+        Axi4Incr_result = {Axi4Incr_highCat,Axi4Incr_baseIncr};
       end
     endcase
   end
@@ -8866,7 +9215,7 @@ module Axi4SharedOnChipRam (
   assign stage0_payload_fragment_size = unburstify_result_payload_fragment_size;
   assign stage0_payload_fragment_burst = unburstify_result_payload_fragment_burst;
   assign stage0_payload_fragment_write = unburstify_result_payload_fragment_write;
-  assign _zz_io_axi_r_payload_data = stage0_payload_fragment_addr[11 : 2];
+  assign _zz_io_axi_r_payload_data = stage0_payload_fragment_addr[12 : 2];
   assign stage0_fire = (stage0_valid && stage0_ready);
   assign _zz_io_axi_r_payload_data_1 = io_axi_w_payload_data;
   assign io_axi_r_payload_data = ram_spinal_port0;
@@ -9059,7 +9408,7 @@ module StreamFifoLowLatency_1 (
   wire       [2:0]    fifo_io_occupancy;
   wire       [2:0]    fifo_io_availability;
 
-  StreamFifo_3 fifo (
+  StreamFifo_5 fifo (
     .io_push_valid      (io_push_valid            ), //i
     .io_push_ready      (fifo_io_push_ready       ), //o
     .io_pop_valid       (fifo_io_pop_valid        ), //o
@@ -9080,7 +9429,7 @@ endmodule
 module StreamArbiter_1 (
   input  wire          io_inputs_0_valid,
   output wire          io_inputs_0_ready,
-  input  wire [11:0]   io_inputs_0_payload_addr,
+  input  wire [12:0]   io_inputs_0_payload_addr,
   input  wire [2:0]    io_inputs_0_payload_id,
   input  wire [7:0]    io_inputs_0_payload_len,
   input  wire [2:0]    io_inputs_0_payload_size,
@@ -9088,7 +9437,7 @@ module StreamArbiter_1 (
   input  wire          io_inputs_0_payload_write,
   input  wire          io_inputs_1_valid,
   output wire          io_inputs_1_ready,
-  input  wire [11:0]   io_inputs_1_payload_addr,
+  input  wire [12:0]   io_inputs_1_payload_addr,
   input  wire [2:0]    io_inputs_1_payload_id,
   input  wire [7:0]    io_inputs_1_payload_len,
   input  wire [2:0]    io_inputs_1_payload_size,
@@ -9096,7 +9445,7 @@ module StreamArbiter_1 (
   input  wire          io_inputs_1_payload_write,
   output wire          io_output_valid,
   input  wire          io_output_ready,
-  output wire [11:0]   io_output_payload_addr,
+  output wire [12:0]   io_output_payload_addr,
   output wire [2:0]    io_output_payload_id,
   output wire [7:0]    io_output_payload_len,
   output wire [2:0]    io_output_payload_size,
@@ -10465,9 +10814,7 @@ module InstructionCache (
 
 endmodule
 
-//StreamFifo_1 replaced by StreamFifo
-
-module StreamFifo (
+module StreamFifo_1 (
   input  wire          io_push_valid,
   output wire          io_push_ready,
   input  wire [7:0]    io_push_payload,
@@ -10608,6 +10955,606 @@ module StreamFifo (
       end
       if(io_flush) begin
         logic_pop_sync_popReg <= 5'h0;
+      end
+    end
+  end
+
+  always @(posedge io_axiClk) begin
+    if(logic_pop_addressGen_ready) begin
+      logic_pop_addressGen_rData <= logic_pop_addressGen_payload;
+    end
+  end
+
+
+endmodule
+
+module StreamFifo (
+  input  wire          io_push_valid,
+  output wire          io_push_ready,
+  input  wire [0:0]    io_push_payload_mode,
+  input  wire [8:0]    io_push_payload_args,
+  output wire          io_pop_valid,
+  input  wire          io_pop_ready,
+  output wire [0:0]    io_pop_payload_mode,
+  output wire [8:0]    io_pop_payload_args,
+  input  wire          io_flush,
+  output wire [4:0]    io_occupancy,
+  output wire [4:0]    io_availability,
+  input  wire          io_axiClk,
+  input  wire          resetCtrl_axiReset
+);
+  localparam SpiMasterCtrlCmdMode_DATA = 1'd0;
+  localparam SpiMasterCtrlCmdMode_SS = 1'd1;
+
+  reg        [9:0]    logic_ram_spinal_port1;
+  wire       [9:0]    _zz_logic_ram_port;
+  reg                 _zz_1;
+  wire                logic_ptr_doPush;
+  wire                logic_ptr_doPop;
+  wire                logic_ptr_full;
+  wire                logic_ptr_empty;
+  reg        [4:0]    logic_ptr_push;
+  reg        [4:0]    logic_ptr_pop;
+  wire       [4:0]    logic_ptr_occupancy;
+  wire       [4:0]    logic_ptr_popOnIo;
+  wire                when_Stream_l1248;
+  reg                 logic_ptr_wentUp;
+  wire                io_push_fire;
+  wire                logic_push_onRam_write_valid;
+  wire       [3:0]    logic_push_onRam_write_payload_address;
+  wire       [0:0]    logic_push_onRam_write_payload_data_mode;
+  wire       [8:0]    logic_push_onRam_write_payload_data_args;
+  wire                logic_pop_addressGen_valid;
+  reg                 logic_pop_addressGen_ready;
+  wire       [3:0]    logic_pop_addressGen_payload;
+  wire                logic_pop_addressGen_fire;
+  wire                logic_pop_sync_readArbitation_valid;
+  wire                logic_pop_sync_readArbitation_ready;
+  wire       [3:0]    logic_pop_sync_readArbitation_payload;
+  reg                 logic_pop_addressGen_rValid;
+  reg        [3:0]    logic_pop_addressGen_rData;
+  wire                when_Stream_l375;
+  wire                logic_pop_sync_readPort_cmd_valid;
+  wire       [3:0]    logic_pop_sync_readPort_cmd_payload;
+  wire       [0:0]    logic_pop_sync_readPort_rsp_mode;
+  wire       [8:0]    logic_pop_sync_readPort_rsp_args;
+  wire       [0:0]    _zz_logic_pop_sync_readPort_rsp_mode;
+  wire       [9:0]    _zz_logic_pop_sync_readPort_rsp_args;
+  wire       [0:0]    _zz_logic_pop_sync_readPort_rsp_mode_1;
+  wire                logic_pop_sync_readArbitation_translated_valid;
+  wire                logic_pop_sync_readArbitation_translated_ready;
+  wire       [0:0]    logic_pop_sync_readArbitation_translated_payload_mode;
+  wire       [8:0]    logic_pop_sync_readArbitation_translated_payload_args;
+  wire                logic_pop_sync_readArbitation_fire;
+  reg        [4:0]    logic_pop_sync_popReg;
+  `ifndef SYNTHESIS
+  reg [31:0] io_push_payload_mode_string;
+  reg [31:0] io_pop_payload_mode_string;
+  reg [31:0] logic_push_onRam_write_payload_data_mode_string;
+  reg [31:0] logic_pop_sync_readPort_rsp_mode_string;
+  reg [31:0] _zz_logic_pop_sync_readPort_rsp_mode_string;
+  reg [31:0] _zz_logic_pop_sync_readPort_rsp_mode_1_string;
+  reg [31:0] logic_pop_sync_readArbitation_translated_payload_mode_string;
+  `endif
+
+  reg [9:0] logic_ram [0:15];
+
+  assign _zz_logic_ram_port = {logic_push_onRam_write_payload_data_args,logic_push_onRam_write_payload_data_mode};
+  always @(posedge io_axiClk) begin
+    if(_zz_1) begin
+      logic_ram[logic_push_onRam_write_payload_address] <= _zz_logic_ram_port;
+    end
+  end
+
+  always @(posedge io_axiClk) begin
+    if(logic_pop_sync_readPort_cmd_valid) begin
+      logic_ram_spinal_port1 <= logic_ram[logic_pop_sync_readPort_cmd_payload];
+    end
+  end
+
+  `ifndef SYNTHESIS
+  always @(*) begin
+    case(io_push_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : io_push_payload_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : io_push_payload_mode_string = "SS  ";
+      default : io_push_payload_mode_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(io_pop_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : io_pop_payload_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : io_pop_payload_mode_string = "SS  ";
+      default : io_pop_payload_mode_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(logic_push_onRam_write_payload_data_mode)
+      SpiMasterCtrlCmdMode_DATA : logic_push_onRam_write_payload_data_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : logic_push_onRam_write_payload_data_mode_string = "SS  ";
+      default : logic_push_onRam_write_payload_data_mode_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(logic_pop_sync_readPort_rsp_mode)
+      SpiMasterCtrlCmdMode_DATA : logic_pop_sync_readPort_rsp_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : logic_pop_sync_readPort_rsp_mode_string = "SS  ";
+      default : logic_pop_sync_readPort_rsp_mode_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(_zz_logic_pop_sync_readPort_rsp_mode)
+      SpiMasterCtrlCmdMode_DATA : _zz_logic_pop_sync_readPort_rsp_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : _zz_logic_pop_sync_readPort_rsp_mode_string = "SS  ";
+      default : _zz_logic_pop_sync_readPort_rsp_mode_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(_zz_logic_pop_sync_readPort_rsp_mode_1)
+      SpiMasterCtrlCmdMode_DATA : _zz_logic_pop_sync_readPort_rsp_mode_1_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : _zz_logic_pop_sync_readPort_rsp_mode_1_string = "SS  ";
+      default : _zz_logic_pop_sync_readPort_rsp_mode_1_string = "????";
+    endcase
+  end
+  always @(*) begin
+    case(logic_pop_sync_readArbitation_translated_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : logic_pop_sync_readArbitation_translated_payload_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : logic_pop_sync_readArbitation_translated_payload_mode_string = "SS  ";
+      default : logic_pop_sync_readArbitation_translated_payload_mode_string = "????";
+    endcase
+  end
+  `endif
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(logic_push_onRam_write_valid) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  assign when_Stream_l1248 = (logic_ptr_doPush != logic_ptr_doPop);
+  assign logic_ptr_full = (((logic_ptr_push ^ logic_ptr_popOnIo) ^ 5'h10) == 5'h0);
+  assign logic_ptr_empty = (logic_ptr_push == logic_ptr_pop);
+  assign logic_ptr_occupancy = (logic_ptr_push - logic_ptr_popOnIo);
+  assign io_push_ready = (! logic_ptr_full);
+  assign io_push_fire = (io_push_valid && io_push_ready);
+  assign logic_ptr_doPush = io_push_fire;
+  assign logic_push_onRam_write_valid = io_push_fire;
+  assign logic_push_onRam_write_payload_address = logic_ptr_push[3:0];
+  assign logic_push_onRam_write_payload_data_mode = io_push_payload_mode;
+  assign logic_push_onRam_write_payload_data_args = io_push_payload_args;
+  assign logic_pop_addressGen_valid = (! logic_ptr_empty);
+  assign logic_pop_addressGen_payload = logic_ptr_pop[3:0];
+  assign logic_pop_addressGen_fire = (logic_pop_addressGen_valid && logic_pop_addressGen_ready);
+  assign logic_ptr_doPop = logic_pop_addressGen_fire;
+  always @(*) begin
+    logic_pop_addressGen_ready = logic_pop_sync_readArbitation_ready;
+    if(when_Stream_l375) begin
+      logic_pop_addressGen_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l375 = (! logic_pop_sync_readArbitation_valid);
+  assign logic_pop_sync_readArbitation_valid = logic_pop_addressGen_rValid;
+  assign logic_pop_sync_readArbitation_payload = logic_pop_addressGen_rData;
+  assign _zz_logic_pop_sync_readPort_rsp_args = logic_ram_spinal_port1;
+  assign _zz_logic_pop_sync_readPort_rsp_mode_1 = _zz_logic_pop_sync_readPort_rsp_args[0 : 0];
+  assign _zz_logic_pop_sync_readPort_rsp_mode = _zz_logic_pop_sync_readPort_rsp_mode_1;
+  assign logic_pop_sync_readPort_rsp_mode = _zz_logic_pop_sync_readPort_rsp_mode;
+  assign logic_pop_sync_readPort_rsp_args = _zz_logic_pop_sync_readPort_rsp_args[9 : 1];
+  assign logic_pop_sync_readPort_cmd_valid = logic_pop_addressGen_fire;
+  assign logic_pop_sync_readPort_cmd_payload = logic_pop_addressGen_payload;
+  assign logic_pop_sync_readArbitation_translated_valid = logic_pop_sync_readArbitation_valid;
+  assign logic_pop_sync_readArbitation_ready = logic_pop_sync_readArbitation_translated_ready;
+  assign logic_pop_sync_readArbitation_translated_payload_mode = logic_pop_sync_readPort_rsp_mode;
+  assign logic_pop_sync_readArbitation_translated_payload_args = logic_pop_sync_readPort_rsp_args;
+  assign io_pop_valid = logic_pop_sync_readArbitation_translated_valid;
+  assign logic_pop_sync_readArbitation_translated_ready = io_pop_ready;
+  assign io_pop_payload_mode = logic_pop_sync_readArbitation_translated_payload_mode;
+  assign io_pop_payload_args = logic_pop_sync_readArbitation_translated_payload_args;
+  assign logic_pop_sync_readArbitation_fire = (logic_pop_sync_readArbitation_valid && logic_pop_sync_readArbitation_ready);
+  assign logic_ptr_popOnIo = logic_pop_sync_popReg;
+  assign io_occupancy = logic_ptr_occupancy;
+  assign io_availability = (5'h10 - logic_ptr_occupancy);
+  always @(posedge io_axiClk or posedge resetCtrl_axiReset) begin
+    if(resetCtrl_axiReset) begin
+      logic_ptr_push <= 5'h0;
+      logic_ptr_pop <= 5'h0;
+      logic_ptr_wentUp <= 1'b0;
+      logic_pop_addressGen_rValid <= 1'b0;
+      logic_pop_sync_popReg <= 5'h0;
+    end else begin
+      if(when_Stream_l1248) begin
+        logic_ptr_wentUp <= logic_ptr_doPush;
+      end
+      if(io_flush) begin
+        logic_ptr_wentUp <= 1'b0;
+      end
+      if(logic_ptr_doPush) begin
+        logic_ptr_push <= (logic_ptr_push + 5'h01);
+      end
+      if(logic_ptr_doPop) begin
+        logic_ptr_pop <= (logic_ptr_pop + 5'h01);
+      end
+      if(io_flush) begin
+        logic_ptr_push <= 5'h0;
+        logic_ptr_pop <= 5'h0;
+      end
+      if(logic_pop_addressGen_ready) begin
+        logic_pop_addressGen_rValid <= logic_pop_addressGen_valid;
+      end
+      if(io_flush) begin
+        logic_pop_addressGen_rValid <= 1'b0;
+      end
+      if(logic_pop_sync_readArbitation_fire) begin
+        logic_pop_sync_popReg <= logic_ptr_pop;
+      end
+      if(io_flush) begin
+        logic_pop_sync_popReg <= 5'h0;
+      end
+    end
+  end
+
+  always @(posedge io_axiClk) begin
+    if(logic_pop_addressGen_ready) begin
+      logic_pop_addressGen_rData <= logic_pop_addressGen_payload;
+    end
+  end
+
+
+endmodule
+
+module SpiMasterCtrl (
+  input  wire          io_config_kind_cpol,
+  input  wire          io_config_kind_cpha,
+  input  wire [31:0]   io_config_sclkToggle,
+  input  wire [0:0]    io_config_ss_activeHigh,
+  input  wire [31:0]   io_config_ss_setup,
+  input  wire [31:0]   io_config_ss_hold,
+  input  wire [31:0]   io_config_ss_disable,
+  input  wire          io_cmd_valid,
+  output reg           io_cmd_ready,
+  input  wire [0:0]    io_cmd_payload_mode,
+  input  wire [8:0]    io_cmd_payload_args,
+  output wire          io_rsp_valid,
+  output wire [7:0]    io_rsp_payload,
+  output wire [0:0]    io_spi_ss,
+  output wire          io_spi_sclk,
+  output wire          io_spi_mosi,
+  input  wire          io_spi_miso,
+  input  wire          io_axiClk,
+  input  wire          resetCtrl_axiReset
+);
+  localparam SpiMasterCtrlCmdMode_DATA = 1'd0;
+  localparam SpiMasterCtrlCmdMode_SS = 1'd1;
+
+  wire       [3:0]    _zz_fsm_counter_valueNext;
+  wire       [0:0]    _zz_fsm_counter_valueNext_1;
+  wire       [8:0]    _zz_fsm_buffer;
+  wire                _zz_when;
+  wire       [7:0]    _zz__zz_io_spi_mosi;
+  wire       [2:0]    _zz__zz_io_spi_mosi_1;
+  wire       [2:0]    _zz__zz_io_spi_mosi_2;
+  reg        [31:0]   timer_counter;
+  reg                 timer_reset;
+  wire                timer_ss_setupHit;
+  wire                timer_ss_holdHit;
+  wire                timer_ss_disableHit;
+  wire                timer_sclkToggleHit;
+  reg                 fsm_counter_willIncrement;
+  wire                fsm_counter_willClear;
+  reg        [3:0]    fsm_counter_valueNext;
+  reg        [3:0]    fsm_counter_value;
+  wire                fsm_counter_willOverflowIfInc;
+  wire                fsm_counter_willOverflow;
+  reg        [7:0]    fsm_buffer;
+  reg        [0:0]    fsm_ss;
+  wire                when_SpiMasterCtrl_l194;
+  wire                when_SpiMasterCtrl_l199;
+  wire                when_SpiMasterCtrl_l211;
+  wire                io_cmd_fire;
+  reg                 _zz_io_rsp_valid;
+  wire                when_SpiMasterCtrl_l232;
+  reg                 _zz_io_spi_sclk;
+  reg                 _zz_io_spi_mosi;
+  `ifndef SYNTHESIS
+  reg [31:0] io_cmd_payload_mode_string;
+  `endif
+
+
+  assign _zz_when = io_cmd_payload_args[0];
+  assign _zz_fsm_counter_valueNext_1 = fsm_counter_willIncrement;
+  assign _zz_fsm_counter_valueNext = {3'd0, _zz_fsm_counter_valueNext_1};
+  assign _zz_fsm_buffer = {fsm_buffer,io_spi_miso};
+  assign _zz__zz_io_spi_mosi = io_cmd_payload_args[7 : 0];
+  assign _zz__zz_io_spi_mosi_1 = (3'b111 - _zz__zz_io_spi_mosi_2);
+  assign _zz__zz_io_spi_mosi_2 = (fsm_counter_value >>> 1'd1);
+  `ifndef SYNTHESIS
+  always @(*) begin
+    case(io_cmd_payload_mode)
+      SpiMasterCtrlCmdMode_DATA : io_cmd_payload_mode_string = "DATA";
+      SpiMasterCtrlCmdMode_SS : io_cmd_payload_mode_string = "SS  ";
+      default : io_cmd_payload_mode_string = "????";
+    endcase
+  end
+  `endif
+
+  always @(*) begin
+    timer_reset = 1'b0;
+    if(io_cmd_valid) begin
+      if(when_SpiMasterCtrl_l194) begin
+        if(timer_sclkToggleHit) begin
+          timer_reset = 1'b1;
+        end
+      end else begin
+        if(!_zz_when) begin
+          if(when_SpiMasterCtrl_l211) begin
+            if(timer_ss_holdHit) begin
+              timer_reset = 1'b1;
+            end
+          end
+        end
+      end
+    end
+    if(when_SpiMasterCtrl_l232) begin
+      timer_reset = 1'b1;
+    end
+  end
+
+  assign timer_ss_setupHit = (timer_counter == io_config_ss_setup);
+  assign timer_ss_holdHit = (timer_counter == io_config_ss_hold);
+  assign timer_ss_disableHit = (timer_counter == io_config_ss_disable);
+  assign timer_sclkToggleHit = (timer_counter == io_config_sclkToggle);
+  always @(*) begin
+    fsm_counter_willIncrement = 1'b0;
+    if(io_cmd_valid) begin
+      if(when_SpiMasterCtrl_l194) begin
+        if(timer_sclkToggleHit) begin
+          fsm_counter_willIncrement = 1'b1;
+        end
+      end else begin
+        if(!_zz_when) begin
+          if(when_SpiMasterCtrl_l211) begin
+            if(timer_ss_holdHit) begin
+              fsm_counter_willIncrement = 1'b1;
+            end
+          end
+        end
+      end
+    end
+  end
+
+  assign fsm_counter_willClear = 1'b0;
+  assign fsm_counter_willOverflowIfInc = (fsm_counter_value == 4'b1111);
+  assign fsm_counter_willOverflow = (fsm_counter_willOverflowIfInc && fsm_counter_willIncrement);
+  always @(*) begin
+    fsm_counter_valueNext = (fsm_counter_value + _zz_fsm_counter_valueNext);
+    if(fsm_counter_willClear) begin
+      fsm_counter_valueNext = 4'b0000;
+    end
+  end
+
+  always @(*) begin
+    io_cmd_ready = 1'b0;
+    if(io_cmd_valid) begin
+      if(when_SpiMasterCtrl_l194) begin
+        if(timer_sclkToggleHit) begin
+          io_cmd_ready = fsm_counter_willOverflowIfInc;
+        end
+      end else begin
+        if(_zz_when) begin
+          if(timer_ss_setupHit) begin
+            io_cmd_ready = 1'b1;
+          end
+        end else begin
+          if(!when_SpiMasterCtrl_l211) begin
+            if(timer_ss_disableHit) begin
+              io_cmd_ready = 1'b1;
+            end
+          end
+        end
+      end
+    end
+  end
+
+  assign when_SpiMasterCtrl_l194 = (io_cmd_payload_mode == SpiMasterCtrlCmdMode_DATA);
+  assign when_SpiMasterCtrl_l199 = fsm_counter_value[0];
+  assign when_SpiMasterCtrl_l211 = (! fsm_counter_value[0]);
+  assign io_cmd_fire = (io_cmd_valid && io_cmd_ready);
+  assign io_rsp_valid = _zz_io_rsp_valid;
+  assign io_rsp_payload = fsm_buffer;
+  assign when_SpiMasterCtrl_l232 = ((! io_cmd_valid) || io_cmd_ready);
+  assign io_spi_ss = (fsm_ss ^ io_config_ss_activeHigh);
+  assign io_spi_sclk = _zz_io_spi_sclk;
+  assign io_spi_mosi = _zz_io_spi_mosi;
+  always @(posedge io_axiClk) begin
+    timer_counter <= (timer_counter + 32'h00000001);
+    if(timer_reset) begin
+      timer_counter <= 32'h0;
+    end
+    if(io_cmd_valid) begin
+      if(when_SpiMasterCtrl_l194) begin
+        if(timer_sclkToggleHit) begin
+          if(when_SpiMasterCtrl_l199) begin
+            fsm_buffer <= _zz_fsm_buffer[7:0];
+          end
+        end
+      end
+    end
+    _zz_io_spi_sclk <= (((io_cmd_valid && (io_cmd_payload_mode == SpiMasterCtrlCmdMode_DATA)) && (fsm_counter_value[0] ^ io_config_kind_cpha)) ^ io_config_kind_cpol);
+    _zz_io_spi_mosi <= _zz__zz_io_spi_mosi[_zz__zz_io_spi_mosi_1];
+  end
+
+  always @(posedge io_axiClk or posedge resetCtrl_axiReset) begin
+    if(resetCtrl_axiReset) begin
+      fsm_counter_value <= 4'b0000;
+      fsm_ss <= 1'b1;
+      _zz_io_rsp_valid <= 1'b0;
+    end else begin
+      fsm_counter_value <= fsm_counter_valueNext;
+      if(io_cmd_valid) begin
+        if(!when_SpiMasterCtrl_l194) begin
+          if(_zz_when) begin
+            fsm_ss[0] <= 1'b0;
+          end else begin
+            if(!when_SpiMasterCtrl_l211) begin
+              fsm_ss[0] <= 1'b1;
+            end
+          end
+        end
+      end
+      _zz_io_rsp_valid <= ((io_cmd_fire && (io_cmd_payload_mode == SpiMasterCtrlCmdMode_DATA)) && io_cmd_payload_args[8]);
+      if(when_SpiMasterCtrl_l232) begin
+        fsm_counter_value <= 4'b0000;
+      end
+    end
+  end
+
+
+endmodule
+
+//StreamFifo_3 replaced by StreamFifo_2
+
+module StreamFifo_2 (
+  input  wire          io_push_valid,
+  output wire          io_push_ready,
+  input  wire [7:0]    io_push_payload,
+  output wire          io_pop_valid,
+  input  wire          io_pop_ready,
+  output wire [7:0]    io_pop_payload,
+  input  wire          io_flush,
+  output wire [5:0]    io_occupancy,
+  output wire [5:0]    io_availability,
+  input  wire          io_axiClk,
+  input  wire          resetCtrl_axiReset
+);
+
+  reg        [7:0]    logic_ram_spinal_port1;
+  reg                 _zz_1;
+  wire                logic_ptr_doPush;
+  wire                logic_ptr_doPop;
+  wire                logic_ptr_full;
+  wire                logic_ptr_empty;
+  reg        [5:0]    logic_ptr_push;
+  reg        [5:0]    logic_ptr_pop;
+  wire       [5:0]    logic_ptr_occupancy;
+  wire       [5:0]    logic_ptr_popOnIo;
+  wire                when_Stream_l1248;
+  reg                 logic_ptr_wentUp;
+  wire                io_push_fire;
+  wire                logic_push_onRam_write_valid;
+  wire       [4:0]    logic_push_onRam_write_payload_address;
+  wire       [7:0]    logic_push_onRam_write_payload_data;
+  wire                logic_pop_addressGen_valid;
+  reg                 logic_pop_addressGen_ready;
+  wire       [4:0]    logic_pop_addressGen_payload;
+  wire                logic_pop_addressGen_fire;
+  wire                logic_pop_sync_readArbitation_valid;
+  wire                logic_pop_sync_readArbitation_ready;
+  wire       [4:0]    logic_pop_sync_readArbitation_payload;
+  reg                 logic_pop_addressGen_rValid;
+  reg        [4:0]    logic_pop_addressGen_rData;
+  wire                when_Stream_l375;
+  wire                logic_pop_sync_readPort_cmd_valid;
+  wire       [4:0]    logic_pop_sync_readPort_cmd_payload;
+  wire       [7:0]    logic_pop_sync_readPort_rsp;
+  wire                logic_pop_sync_readArbitation_translated_valid;
+  wire                logic_pop_sync_readArbitation_translated_ready;
+  wire       [7:0]    logic_pop_sync_readArbitation_translated_payload;
+  wire                logic_pop_sync_readArbitation_fire;
+  reg        [5:0]    logic_pop_sync_popReg;
+  reg [7:0] logic_ram [0:31];
+
+  always @(posedge io_axiClk) begin
+    if(_zz_1) begin
+      logic_ram[logic_push_onRam_write_payload_address] <= logic_push_onRam_write_payload_data;
+    end
+  end
+
+  always @(posedge io_axiClk) begin
+    if(logic_pop_sync_readPort_cmd_valid) begin
+      logic_ram_spinal_port1 <= logic_ram[logic_pop_sync_readPort_cmd_payload];
+    end
+  end
+
+  always @(*) begin
+    _zz_1 = 1'b0;
+    if(logic_push_onRam_write_valid) begin
+      _zz_1 = 1'b1;
+    end
+  end
+
+  assign when_Stream_l1248 = (logic_ptr_doPush != logic_ptr_doPop);
+  assign logic_ptr_full = (((logic_ptr_push ^ logic_ptr_popOnIo) ^ 6'h20) == 6'h0);
+  assign logic_ptr_empty = (logic_ptr_push == logic_ptr_pop);
+  assign logic_ptr_occupancy = (logic_ptr_push - logic_ptr_popOnIo);
+  assign io_push_ready = (! logic_ptr_full);
+  assign io_push_fire = (io_push_valid && io_push_ready);
+  assign logic_ptr_doPush = io_push_fire;
+  assign logic_push_onRam_write_valid = io_push_fire;
+  assign logic_push_onRam_write_payload_address = logic_ptr_push[4:0];
+  assign logic_push_onRam_write_payload_data = io_push_payload;
+  assign logic_pop_addressGen_valid = (! logic_ptr_empty);
+  assign logic_pop_addressGen_payload = logic_ptr_pop[4:0];
+  assign logic_pop_addressGen_fire = (logic_pop_addressGen_valid && logic_pop_addressGen_ready);
+  assign logic_ptr_doPop = logic_pop_addressGen_fire;
+  always @(*) begin
+    logic_pop_addressGen_ready = logic_pop_sync_readArbitation_ready;
+    if(when_Stream_l375) begin
+      logic_pop_addressGen_ready = 1'b1;
+    end
+  end
+
+  assign when_Stream_l375 = (! logic_pop_sync_readArbitation_valid);
+  assign logic_pop_sync_readArbitation_valid = logic_pop_addressGen_rValid;
+  assign logic_pop_sync_readArbitation_payload = logic_pop_addressGen_rData;
+  assign logic_pop_sync_readPort_rsp = logic_ram_spinal_port1;
+  assign logic_pop_sync_readPort_cmd_valid = logic_pop_addressGen_fire;
+  assign logic_pop_sync_readPort_cmd_payload = logic_pop_addressGen_payload;
+  assign logic_pop_sync_readArbitation_translated_valid = logic_pop_sync_readArbitation_valid;
+  assign logic_pop_sync_readArbitation_ready = logic_pop_sync_readArbitation_translated_ready;
+  assign logic_pop_sync_readArbitation_translated_payload = logic_pop_sync_readPort_rsp;
+  assign io_pop_valid = logic_pop_sync_readArbitation_translated_valid;
+  assign logic_pop_sync_readArbitation_translated_ready = io_pop_ready;
+  assign io_pop_payload = logic_pop_sync_readArbitation_translated_payload;
+  assign logic_pop_sync_readArbitation_fire = (logic_pop_sync_readArbitation_valid && logic_pop_sync_readArbitation_ready);
+  assign logic_ptr_popOnIo = logic_pop_sync_popReg;
+  assign io_occupancy = logic_ptr_occupancy;
+  assign io_availability = (6'h20 - logic_ptr_occupancy);
+  always @(posedge io_axiClk or posedge resetCtrl_axiReset) begin
+    if(resetCtrl_axiReset) begin
+      logic_ptr_push <= 6'h0;
+      logic_ptr_pop <= 6'h0;
+      logic_ptr_wentUp <= 1'b0;
+      logic_pop_addressGen_rValid <= 1'b0;
+      logic_pop_sync_popReg <= 6'h0;
+    end else begin
+      if(when_Stream_l1248) begin
+        logic_ptr_wentUp <= logic_ptr_doPush;
+      end
+      if(io_flush) begin
+        logic_ptr_wentUp <= 1'b0;
+      end
+      if(logic_ptr_doPush) begin
+        logic_ptr_push <= (logic_ptr_push + 6'h01);
+      end
+      if(logic_ptr_doPop) begin
+        logic_ptr_pop <= (logic_ptr_pop + 6'h01);
+      end
+      if(io_flush) begin
+        logic_ptr_push <= 6'h0;
+        logic_ptr_pop <= 6'h0;
+      end
+      if(logic_pop_addressGen_ready) begin
+        logic_pop_addressGen_rValid <= logic_pop_addressGen_valid;
+      end
+      if(io_flush) begin
+        logic_pop_addressGen_rValid <= 1'b0;
+      end
+      if(logic_pop_sync_readArbitation_fire) begin
+        logic_pop_sync_popReg <= logic_ptr_pop;
+      end
+      if(io_flush) begin
+        logic_pop_sync_popReg <= 6'h0;
       end
     end
   end
@@ -10921,14 +11868,14 @@ endmodule
 //BufferCC_3 replaced by BufferCC_4
 
 module BufferCC_4 (
-  input  wire [31:0]   io_dataIn,
-  output wire [31:0]   io_dataOut,
+  input  wire [3:0]    io_dataIn,
+  output wire [3:0]    io_dataOut,
   input  wire          io_axiClk,
   input  wire          resetCtrl_axiReset
 );
 
-  (* async_reg = "true" *) reg        [31:0]   buffers_0;
-  (* async_reg = "true" *) reg        [31:0]   buffers_1;
+  (* async_reg = "true" *) reg        [3:0]    buffers_0;
+  (* async_reg = "true" *) reg        [3:0]    buffers_1;
 
   assign io_dataOut = buffers_1;
   always @(posedge io_axiClk) begin
@@ -10939,9 +11886,9 @@ module BufferCC_4 (
 
 endmodule
 
-//StreamFifo_2 replaced by StreamFifo_3
+//StreamFifo_4 replaced by StreamFifo_5
 
-module StreamFifo_3 (
+module StreamFifo_5 (
   input  wire          io_push_valid,
   output wire          io_push_ready,
   output reg           io_pop_valid,

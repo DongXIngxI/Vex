@@ -15,8 +15,8 @@ INC += -I../../../libs/
 # 添加外设头文件
 INC += -I../libs/
 # 执行对应目录下的makefile文件
-include ../../../resources/gcc.mk
-include ../../../resources/subproject.mk
+include ../resources/gcc.mk
+include ../resources/subproject.mk
 
 
 			

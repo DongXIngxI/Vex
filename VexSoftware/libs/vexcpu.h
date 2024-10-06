@@ -13,13 +13,14 @@
 #include "interrupt.h"
 #include "uart.h"
 #include "gpio.h"
+#include "spi.h"
 
 #define CORE_HZ 50000000
 
 #define GPIO_A_BASE    ((Gpio_Reg*)(0xF0000000))
 #define GPIO_B_BASE    ((Gpio_Reg*)(0xF0001000))
 #define UART           ((Uart_Reg*)(0xF0010000))
-
+#define SPI              ((Spi_Reg*) (0xF0030000))
 
 
 #define TIMER_PRESCALER ((Prescaler_Reg*)0xF0020000)
@@ -67,4 +68,18 @@ void print(Uart_Reg* reg, char *str, uint32_t data)
     print_number(reg, data);
     uart_write(UART,'\n');
 }
+void delay(uint32_t ms)
+{
+    prescaler_init(TIMER_PRESCALER);
+	timer_init(TIMER_A);
+	TIMER_PRESCALER->LIMIT = 50000-1; //1 ms rate
+	TIMER_A->LIMIT = ms-1;  //1 second rate
+	TIMER_A->CLEARS_TICKS = 0x00010002;
+    while (true)
+    {
+       while ((TIMER_A->VALUE) != TIMER_A->LIMIT)
+       break;
+    }
+}
+
 #endif /* BRIEY_H_ */
